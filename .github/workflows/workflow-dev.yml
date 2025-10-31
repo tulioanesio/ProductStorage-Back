@@ -41,9 +41,13 @@ jobs:
           cache: 'maven'
 
       - name: Executar Build + Testes
-        if: ${{ github.event_name == 'pull_request' || github.event.inputs.run_mode == 'Build + testes' }}
-        run: mvn -B package --file pom.xml
+        if: ${{ github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'Build + testes') }}
+        env:
+          SPRING_PROFILES_ACTIVE: test
+        run: mvn -B clean package --file pom.xml
 
       - name: Executar Apenas Build
         if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'Apenas build' }}
-        run: mvn -B package -DskipTests --file pom.xml
+        env:
+          SPRING_PROFILES_ACTIVE: test
+        run: mvn -B clean package -DskipTests --file pom.xml
