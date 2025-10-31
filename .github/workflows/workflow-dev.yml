@@ -1,11 +1,13 @@
-name: 'ci-cd - workflow-dev'
+name: 'Workflow Dev'
 
 on:
-  push:
   pull_request:
-
   workflow_dispatch:
     inputs:
+      branch:
+        description: 'Escolha a branch que deseja rodar'
+        required: true
+        default: 'main'
       run_mode:
         type: choice
         description: 'Escolha o modo de execução'
@@ -17,24 +19,26 @@ on:
 
 jobs:
   build-e-teste:
-    name: Build + Teste
+    name: Build e Teste
     runs-on: ubuntu-latest
 
     steps:
-      - name: 1. Baixando o código (checkout)
+      - name: Baixando o código
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.head_ref || github.ref_name }}
 
-      - name: 2. Configurar JDK 21 (Temurin)
+      - name: Configurar JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: 3. Executar Build + Testes (Padrão)
-        if: github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'Build + testes'
+      - name: Executar Build + Testes
+        if: ${{ github.event_name == 'pull_request' || github.event.inputs.run_mode == 'Build + testes' }}
         run: mvn -B package --file pom.xml
 
-      - name: 3. Executar Apenas Build (Opcional)
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'Apenas build'
+      - name: Executar Apenas Build
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'Apenas build' }}
         run: mvn -B package -DskipTests --file pom.xml
