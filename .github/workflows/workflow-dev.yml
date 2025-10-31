@@ -5,9 +5,14 @@ on:
   workflow_dispatch:
     inputs:
       branch:
+        type: choice
         description: 'Escolha a branch que deseja rodar'
         required: true
         default: 'main'
+        options:
+          - main
+          - develop
+          - feature/xyz
       run_mode:
         type: choice
         description: 'Escolha o modo de execução'
