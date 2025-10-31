@@ -1,4 +1,4 @@
-package com.SDMUNISUL.ProductStorage_Back;
+package com.unisul.product_storage;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -2,9 +2,8 @@ version: "3.9"
 
 services:
   postgres:
-    image: postgres:latest
-    container_name: a3
-    restart: always
+    image: postgres:16
+    container_name: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -14,10 +13,52 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
-      - postgres_network
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d mydatabase"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  spring-app:
+    build: .
+    container_name: spring-app
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - backend
+    restart: on-failure
+
+  prometheus:
+    image: prom/prometheus:v2.49.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+    networks:
+      - backend
+
+  grafana:
+    image: grafana/grafana:10.0.1
+    container_name: grafana
+    ports:
+      - "3456:3000"
+    networks:
+      - backend
+    depends_on:
+      - prometheus
 
 volumes:
   postgres_data:
+
 networks:
-  postgres_network:
-    driver: bridge
+  backend:
