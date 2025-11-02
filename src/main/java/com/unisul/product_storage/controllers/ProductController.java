@@ -3,6 +3,9 @@ package com.unisul.product_storage.controllers;
 import com.unisul.product_storage.dtos.ProductRequestDTO;
 import com.unisul.product_storage.dtos.ProductResponseDTO;
 import com.unisul.product_storage.services.ProductService;
+import jakarta.validation.Valid;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +22,9 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> create(@RequestBody ProductRequestDTO data) {
-        return ResponseEntity.ok(productService.createProduct(data));
+    public ResponseEntity<ProductResponseDTO> create(@Valid @RequestBody ProductRequestDTO data) {
+        ProductResponseDTO created = productService.createProduct(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @GetMapping
@@ -34,7 +38,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> update(@PathVariable Long id, @RequestBody ProductRequestDTO data) {
+    public ResponseEntity<ProductResponseDTO> update(@Valid @PathVariable Long id, @RequestBody ProductRequestDTO data) {
         return ResponseEntity.ok(productService.updateProduct(id, data));
     }
 
