@@ -5,6 +5,8 @@ import com.unisul.product_storage.dtos.ProductResponseDTO;
 import com.unisul.product_storage.exceptions.ProductNotFoundException;
 import com.unisul.product_storage.models.Product;
 import com.unisul.product_storage.repositories.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,11 +34,10 @@ public class ProductService {
         return toResponseDTO(saved);
     }
 
-    public List<ProductResponseDTO> getAllProducts() {
-        return productRepository.findAll()
-                .stream()
-                .map(this::toResponseDTO)
-                .toList();
+    public Page<ProductResponseDTO> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable)
+                .map(this::toResponseDTO);
+
     }
 
     public ProductResponseDTO getProductById(Long id) {
