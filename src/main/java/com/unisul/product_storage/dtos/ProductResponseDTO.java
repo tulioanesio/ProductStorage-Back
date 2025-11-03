@@ -1,7 +1,5 @@
 package com.unisul.product_storage.dtos;
 
-import jdk.jfr.Category;
-
 import java.math.BigDecimal;
 
 public record ProductResponseDTO(

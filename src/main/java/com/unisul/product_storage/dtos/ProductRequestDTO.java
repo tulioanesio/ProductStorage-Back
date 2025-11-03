@@ -1,7 +1,6 @@
 package com.unisul.product_storage.dtos;
 
 import jakarta.validation.constraints.*;
-import jdk.jfr.Category;
 
 import java.math.BigDecimal;
 

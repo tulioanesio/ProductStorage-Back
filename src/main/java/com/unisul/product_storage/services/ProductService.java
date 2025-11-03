@@ -2,6 +2,7 @@ package com.unisul.product_storage.services;
 
 import com.unisul.product_storage.dtos.ProductRequestDTO;
 import com.unisul.product_storage.dtos.ProductResponseDTO;
+import com.unisul.product_storage.exceptions.ProductNotFoundException;
 import com.unisul.product_storage.models.Product;
 import com.unisul.product_storage.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -40,13 +41,13 @@ public class ProductService {
 
     public ProductResponseDTO getProductById(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                .orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found."));
         return toResponseDTO(product);
     }
 
     public ProductResponseDTO updateProduct(Long id, ProductRequestDTO data) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                .orElseThrow(() -> new ProductNotFoundException("Product with id " + id + " not found."));
 
         product.setName(data.name());
         product.setUnitPrice(data.unitPrice());
@@ -62,7 +63,7 @@ public class ProductService {
 
     public void deleteProduct(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new RuntimeException("Produto não encontrado");
+            throw new ProductNotFoundException("Product with id " + id + " not found.");
         }
         productRepository.deleteById(id);
     }

@@ -4,7 +4,6 @@ import com.unisul.product_storage.dtos.ProductRequestDTO;
 import com.unisul.product_storage.dtos.ProductResponseDTO;
 import com.unisul.product_storage.services.ProductService;
 import jakarta.validation.Valid;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

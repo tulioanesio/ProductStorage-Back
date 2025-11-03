@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String name;
     private BigDecimal unitPrice;
     private String unit;
@@ -23,7 +23,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(long id, String name, BigDecimal unitPrice, String unit, int stockQuantity, int minStockQuantity, int maxStockQuantity, String category) {
+    public Product(Long id, String name, BigDecimal unitPrice, String unit, int stockQuantity, int minStockQuantity, int maxStockQuantity, String category) {
         this.id = id;
         this.name = name;
         this.unitPrice = unitPrice;
@@ -34,11 +34,11 @@ public class Product {
         this.category = category;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
