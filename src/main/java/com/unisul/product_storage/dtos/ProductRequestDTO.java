@@ -30,4 +30,5 @@ public record ProductRequestDTO(
         @NotBlank(message = "Category is required.")
         @Size(max = 50, message = "Category must not exceed 50 characters.")
         String category
-) {}
+) {
+}
