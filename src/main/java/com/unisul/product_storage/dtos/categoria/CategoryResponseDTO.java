@@ -1,4 +1,8 @@
 package com.unisul.product_storage.dtos.categoria;
 
-public class CategoryResponseDTO {
-}
+public record CategoryResponseDTO(
+        Long id,
+        String nome,
+        String tamanho,
+        String embalagem
+) {}

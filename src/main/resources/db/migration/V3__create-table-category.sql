@@ -1,11 +1,18 @@
-CREATE TABLE movements (
-    id SERIAL PRIMARY KEY,
-    product_id INT NOT NULL,
-    movement_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    quantity INT NOT NULL,
-    movement_type VARCHAR(10) NOT NULL CHECK (movement_type IN ('ENTRY', 'EXIT')),
-    CONSTRAINT fk_product
-        FOREIGN KEY (product_id)
-        REFERENCES products(id)
-        ON DELETE CASCADE
+CREATE TABLE categories (
+                            id SERIAL PRIMARY KEY,
+                            nome VARCHAR(100) NOT NULL,
+                            tamanho VARCHAR(20),
+                            embalagem VARCHAR(20)
 );
+
+ALTER TABLE products
+    ADD COLUMN category_id INT;
+
+ALTER TABLE products
+    ADD CONSTRAINT fk_category
+        FOREIGN KEY (category_id)
+            REFERENCES categories(id)
+            ON DELETE SET NULL;
+
+ALTER TABLE products
+DROP COLUMN IF EXISTS categoria;
