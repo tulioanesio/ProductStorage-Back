@@ -10,7 +10,7 @@ public record CategoryRequestDTO(
 
         @Size(max = 20, message = "Tamanho não pode exceder 20 caracteres")
         String tamanho,
-git sta
+
         @Size(max = 20, message = "Embalagem não pode exceder 20 caracteres")
         String embalagem
 ) {}
