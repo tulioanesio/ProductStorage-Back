@@ -1,4 +1,4 @@
-package com.unisul.product_storage.dtos;
+package com.unisul.product_storage.dtos.movement;
 
 import com.unisul.product_storage.models.MovementType;
 import com.unisul.product_storage.models.Product;

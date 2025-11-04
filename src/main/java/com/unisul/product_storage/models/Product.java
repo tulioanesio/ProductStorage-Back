@@ -1,26 +1,30 @@
 package com.unisul.product_storage.models;
 
 import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 
 @Entity
+@Table(name = "products")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private BigDecimal unitPrice;
     private String unit;
     private int stockQuantity;
     private int minStockQuantity;
     private int maxStockQuantity;
-    private String category;
 
-    public Product() {
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
-    public Product(Long id, String name, BigDecimal unitPrice, String unit, int stockQuantity, int minStockQuantity, int maxStockQuantity, String category) {
+    public Product() {}
+
+    public Product(Long id, String name, BigDecimal unitPrice, String unit,
+                   int stockQuantity, int minStockQuantity, int maxStockQuantity, Category category) {
         this.id = id;
         this.name = name;
         this.unitPrice = unitPrice;
@@ -31,67 +35,27 @@ public class Product {
         this.category = category;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getName() {
-        return name;
-    }
+    public BigDecimal getUnitPrice() { return unitPrice; }
+    public void setUnitPrice(BigDecimal unitPrice) { this.unitPrice = unitPrice; }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public String getUnit() { return unit; }
+    public void setUnit(String unit) { this.unit = unit; }
 
-    public BigDecimal getUnitPrice() {
-        return unitPrice;
-    }
+    public int getStockQuantity() { return stockQuantity; }
+    public void setStockQuantity(int stockQuantity) { this.stockQuantity = stockQuantity; }
 
-    public void setUnitPrice(BigDecimal unitPrice) {
-        this.unitPrice = unitPrice;
-    }
+    public int getMinStockQuantity() { return minStockQuantity; }
+    public void setMinStockQuantity(int minStockQuantity) { this.minStockQuantity = minStockQuantity; }
 
-    public String getUnit() {
-        return unit;
-    }
+    public int getMaxStockQuantity() { return maxStockQuantity; }
+    public void setMaxStockQuantity(int maxStockQuantity) { this.maxStockQuantity = maxStockQuantity; }
 
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    public int getStockQuantity() {
-        return stockQuantity;
-    }
-
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
-
-    public int getMinStockQuantity() {
-        return minStockQuantity;
-    }
-
-    public void setMinStockQuantity(int minStockQuantity) {
-        this.minStockQuantity = minStockQuantity;
-    }
-
-    public int getMaxStockQuantity() {
-        return maxStockQuantity;
-    }
-
-    public void setMaxStockQuantity(int maxStockQuantity) {
-        this.maxStockQuantity = maxStockQuantity;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
 }

@@ -1,4 +1,4 @@
-package com.unisul.product_storage.dtos;
+package com.unisul.product_storage.dtos.product;
 
 import jakarta.validation.constraints.*;
 
@@ -27,8 +27,6 @@ public record ProductRequestDTO(
         @Min(value = 1, message = "Maximum stock quantity must be at least 1.")
         int maxStockQuantity,
 
-        @NotBlank(message = "Category is required.")
-        @Size(max = 50, message = "Category must not exceed 50 characters.")
-        String category
+        Long categoryId
 ) {
 }

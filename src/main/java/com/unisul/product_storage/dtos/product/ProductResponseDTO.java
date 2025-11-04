@@ -1,4 +1,6 @@
-package com.unisul.product_storage.dtos;
+package com.unisul.product_storage.dtos.product;
+
+import com.unisul.product_storage.dtos.categoria.CategoryResponseDTO;
 
 import java.math.BigDecimal;
 
@@ -10,6 +12,6 @@ public record ProductResponseDTO(
         int stockQuantity,
         int minStockQuantity,
         int maxStockQuantity,
-        String category
+        CategoryResponseDTO category
 ) {
 }
