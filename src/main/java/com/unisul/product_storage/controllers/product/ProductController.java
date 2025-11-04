@@ -1,4 +1,4 @@
-package com.unisul.product_storage.controllers;
+package com.unisul.product_storage.controllers.product;
 
 import com.unisul.product_storage.dtos.product.ProductRequestDTO;
 import com.unisul.product_storage.dtos.product.ProductResponseDTO;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/products")
-public class ProductController {
+public class ProductController implements SwaggerProductController {
 
     private final ProductService productService;
 

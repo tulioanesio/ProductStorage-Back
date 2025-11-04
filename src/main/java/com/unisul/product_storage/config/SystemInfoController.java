@@ -1,5 +1,6 @@
 package com.unisul.product_storage.config;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class SystemInfoController {
 
+    @Hidden
     @GetMapping("/management/system")
     public Map<String, Object> getSystemInfo() {
         RuntimeMXBean runtime = ManagementFactory.getRuntimeMXBean();

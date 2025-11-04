@@ -1,4 +1,4 @@
-package com.unisul.product_storage.controllers;
+package com.unisul.product_storage.controllers.category;
 
 import com.unisul.product_storage.dtos.categoria.CategoryRequestDTO;
 import com.unisul.product_storage.dtos.categoria.CategoryResponseDTO;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/categories")
-public class CategoryController {
+public class CategoryController implements SwaggerCategoryController {
 
     private final CategoryService categoryService;
 

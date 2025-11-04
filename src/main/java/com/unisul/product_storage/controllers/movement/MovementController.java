@@ -1,4 +1,4 @@
-package com.unisul.product_storage.controllers;
+package com.unisul.product_storage.controllers.movement;
 
 import com.unisul.product_storage.dtos.movement.MovementRequestDTO;
 import com.unisul.product_storage.dtos.movement.MovementResponseDTO;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/movements")
-public class MovementController {
+public class MovementController implements SwaggerMovementController {
 
     private final MovementService movementService;
 
@@ -44,7 +44,7 @@ public class MovementController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MovementResponseDTO> deleteById(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         movementService.deleteMovement(id);
         return ResponseEntity.noContent().build();
     }
