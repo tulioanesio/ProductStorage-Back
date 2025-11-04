@@ -42,4 +42,15 @@ public class MovementController {
         return ResponseEntity.ok(movementService.getProductById(id));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<MovementResponseDTO> update(@Valid @PathVariable("id") Long id, @RequestBody MovementRequestDTO data) {
+        return ResponseEntity.ok(movementService.updateMovement(id, data));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<MovementResponseDTO> deleteById(@PathVariable("id") Long id) {
+        movementService.deleteMovement(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

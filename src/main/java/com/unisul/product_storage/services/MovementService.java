@@ -74,6 +74,59 @@ public class MovementService {
         return toResponseDTO(movement);
     }
 
+    public MovementResponseDTO updateMovement(Long id, MovementRequestDTO data) {
+        Movement existing = movementRepository.findById(id)
+                .orElseThrow(() -> new MovementNotFoundException("Movement with id " + id + " not found."));
+
+        Product product = productRepository.findById(data.product().getId())
+                .orElseThrow(() -> new ProductNotFoundException("Product not found."));
+
+        int oldQty = existing.getQuantity();
+        MovementType oldType = existing.getMovementType();
+
+        if (oldType == MovementType.ENTRY) {
+            product.setStockQuantity(product.getStockQuantity() - oldQty);
+        } else if (oldType == MovementType.EXIT) {
+            product.setStockQuantity(product.getStockQuantity() + oldQty);
+        }
+
+        int newQty = data.quantity();
+        MovementType newType = data.movementType();
+
+        if (newType == MovementType.ENTRY) {
+            product.setStockQuantity(product.getStockQuantity() + newQty);
+            if (product.getStockQuantity() > product.getMaxStockQuantity()) {
+                existing.setStatus("Product stock exceeded the maximum limit!");
+            }
+        } else if (newType == MovementType.EXIT) {
+            if (product.getStockQuantity() < newQty) {
+                throw new NotEnoughStockException("Not enough stock for this movement");
+            }
+            product.setStockQuantity(product.getStockQuantity() - newQty);
+            if (product.getStockQuantity() < product.getMinStockQuantity()) {
+                existing.setStatus("Product stock fell below the minimum limit!");
+            }
+        }
+
+        existing.setProduct(product);
+        existing.setQuantity(newQty);
+        existing.setMovementDate(data.movementDate());
+        existing.setMovementType(newType);
+
+        productRepository.save(product);
+        Movement updated = movementRepository.save(existing);
+
+        return toResponseDTO(updated);
+    }
+
+
+    public void deleteMovement(Long id) {
+        if (!movementRepository.existsById(id)) {
+            throw new MovementNotFoundException("Movement with id " + id + " not found.");
+        }
+        movementRepository.deleteById(id);
+    }
+
     private MovementResponseDTO toResponseDTO(Movement movement) {
         return new MovementResponseDTO(
                 movement.getId(),
