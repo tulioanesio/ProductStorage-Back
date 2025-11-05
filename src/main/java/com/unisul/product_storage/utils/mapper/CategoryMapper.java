@@ -1,7 +1,7 @@
 package com.unisul.product_storage.utils.mapper;
 
-import com.unisul.product_storage.dtos.categoria.CategoryRequestDTO;
-import com.unisul.product_storage.dtos.categoria.CategoryResponseDTO;
+import com.unisul.product_storage.dtos.category.CategoryRequestDTO;
+import com.unisul.product_storage.dtos.category.CategoryResponseDTO;
 import com.unisul.product_storage.models.Category;
 
 import java.util.List;

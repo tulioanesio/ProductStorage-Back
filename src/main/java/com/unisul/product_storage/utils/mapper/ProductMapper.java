@@ -1,6 +1,6 @@
 package com.unisul.product_storage.utils.mapper;
 
-import com.unisul.product_storage.dtos.categoria.CategoryResponseDTO;
+import com.unisul.product_storage.dtos.category.CategoryResponseDTO;
 import com.unisul.product_storage.dtos.product.ProductRequestDTO;
 import com.unisul.product_storage.dtos.product.ProductResponseDTO;
 import com.unisul.product_storage.models.Category;

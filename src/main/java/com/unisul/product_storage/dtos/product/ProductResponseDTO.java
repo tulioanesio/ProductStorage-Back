@@ -1,6 +1,6 @@
 package com.unisul.product_storage.dtos.product;
 
-import com.unisul.product_storage.dtos.categoria.CategoryResponseDTO;
+import com.unisul.product_storage.dtos.category.CategoryResponseDTO;
 import java.math.BigDecimal;
 
 public record ProductResponseDTO(

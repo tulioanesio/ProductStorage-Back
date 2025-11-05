@@ -1,7 +1,7 @@
 package com.unisul.product_storage.controllers.category;
 
-import com.unisul.product_storage.dtos.categoria.CategoryRequestDTO;
-import com.unisul.product_storage.dtos.categoria.CategoryResponseDTO;
+import com.unisul.product_storage.dtos.category.CategoryRequestDTO;
+import com.unisul.product_storage.dtos.category.CategoryResponseDTO;
 import com.unisul.product_storage.services.CategoryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

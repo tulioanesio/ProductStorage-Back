@@ -1,4 +1,4 @@
-package com.unisul.product_storage.dtos.categoria;
+package com.unisul.product_storage.dtos.category;
 
 public record CategoryResponseDTO(
         Long id,

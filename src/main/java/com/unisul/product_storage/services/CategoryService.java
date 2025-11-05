@@ -1,7 +1,7 @@
 package com.unisul.product_storage.services;
 
-import com.unisul.product_storage.dtos.categoria.CategoryRequestDTO;
-import com.unisul.product_storage.dtos.categoria.CategoryResponseDTO;
+import com.unisul.product_storage.dtos.category.CategoryRequestDTO;
+import com.unisul.product_storage.dtos.category.CategoryResponseDTO;
 import com.unisul.product_storage.exceptions.handler.BusinessException;
 import com.unisul.product_storage.models.Category;
 import com.unisul.product_storage.repositories.CategoryRepository;
@@ -25,7 +25,7 @@ public class CategoryService {
             throw new BusinessException(
                     HttpStatus.BAD_REQUEST,
                     "Nome inválido",
-                    "O nome da categoria não pode ser vazio ou nulo."
+                    "O nome da category não pode ser vazio ou nulo."
             );
         }
 

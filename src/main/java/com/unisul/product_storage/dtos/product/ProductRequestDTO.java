@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 
-@Schema(description = "Requisição para criação de produto contendo nome, preço, unidade de medida, estoque e categoria.")
+@Schema(description = "Requisição para criação de produto contendo nome, preço, unidade de medida, estoque e category.")
 public record ProductRequestDTO(
 
         @Schema(
@@ -60,7 +60,7 @@ public record ProductRequestDTO(
         int maxStockQuantity,
 
         @Schema(
-                description = "ID da categoria à qual o produto pertence",
+                description = "ID da category à qual o produto pertence",
                 example = "3"
         )
         Long categoryId
