@@ -59,7 +59,7 @@ public class MovementService {
         Movement existing = movementRepository.findById(id)
                 .orElseThrow(() -> new BusinessException(
                         HttpStatus.NOT_FOUND,
-                        "Movimentação não encontrado",
+                        "Movimentação não encontrada",
                         "Não foi possível atualizar. Movimento com ID " + id + " inexistente."
                 ));
 

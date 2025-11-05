@@ -93,8 +93,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
-                                                                      WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
         var apiErro = new ApiErroResponse(BAD_REQUEST);
         apiErro.setMensagem(String.format("O parametro '%s' do valor '%s' nao pode ser convertido para o tipo '%s'",
                 ex.getName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName()));

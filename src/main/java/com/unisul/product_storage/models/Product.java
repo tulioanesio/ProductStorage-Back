@@ -21,7 +21,7 @@ public class Product {
     @Column(name = "unit_of_measure", nullable = false)
     private String unitOfMeasure;
 
-    @Column(name = "stock_avaliable", nullable = false)
+    @Column(name = "stock_available", nullable = false)
     private int stockAvailable;
 
     @Column(name = "min_quantity", nullable = false)
