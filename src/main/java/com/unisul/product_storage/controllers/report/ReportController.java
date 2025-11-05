@@ -1,6 +1,6 @@
-package com.unisul.product_storage.controllers;
+package com.unisul.product_storage.controllers.report;
 
-import com.unisul.product_storage.dtos.PriceListDTO;
+import com.unisul.product_storage.dtos.report.PriceListDTO;
 import com.unisul.product_storage.services.ReportService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
