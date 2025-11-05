@@ -1,0 +1,83 @@
+@startuml
+title Fluxo de Produtos (CRUD Completo)
+
+actor Usuário
+participant "ProductController" as Controller
+participant "ProductService" as Service
+participant "ProductRepository" as ProductRepo
+participant "CategoryRepository" as CategoryRepo
+participant "ProductMapper" as Mapper
+participant "Product" as Product
+participant "ProductResponseDTO" as Response
+
+== Criar Produto ==
+Usuário -> Controller: POST /products (ProductRequestDTO)
+Controller -> Service: createProduct(data)
+
+alt Categoria informada
+    Service -> CategoryRepo: findById(categoryId)
+    CategoryRepo --> Service: Category (ou exceção)
+else Categoria nula
+    note right of Service: category = null
+end
+
+Service -> Mapper: toEntity(data, category)
+Mapper --> Service: Product
+Service -> ProductRepo: save(product)
+ProductRepo --> Service: Product salvo
+Service -> Mapper: toResponseDTO(product)
+Mapper --> Service: ProductResponseDTO
+Service --> Controller: ProductResponseDTO
+Controller --> Usuário: HTTP 201 Created
+
+== Listar Produtos ==
+Usuário -> Controller: GET /products
+Controller -> Service: getAllProducts(pageable)
+Service -> ProductRepo: findAll(pageable)
+ProductRepo --> Service: Page<Product>
+Service -> Mapper: map each Product → ProductResponseDTO
+Mapper --> Service: Page<ProductResponseDTO>
+Service --> Controller: Page<ProductResponseDTO>
+Controller --> Usuário: HTTP 200 OK
+
+== Buscar Produto por ID ==
+Usuário -> Controller: GET /products/{id}
+Controller -> Service: getProductById(id)
+Service -> ProductRepo: findById(id)
+ProductRepo --> Service: Product (ou exceção)
+Service -> Mapper: toResponseDTO(product)
+Mapper --> Service: ProductResponseDTO
+Service --> Controller: ProductResponseDTO
+Controller --> Usuário: HTTP 200 OK
+
+== Atualizar Produto ==
+Usuário -> Controller: PUT /products/{id}
+Controller -> Service: updateProduct(id, data)
+Service -> ProductRepo: findById(id)
+ProductRepo --> Service: Product existente (ou exceção)
+
+alt Categoria informada
+    Service -> CategoryRepo: findById(categoryId)
+    CategoryRepo --> Service: Category (ou exceção)
+else Categoria nula
+    note right of Service: category = null
+end
+
+Service -> Service: atualizar campos do Product
+Service -> ProductRepo: save(product)
+ProductRepo --> Service: Product atualizado
+Service -> Mapper: toResponseDTO(product)
+Mapper --> Service: ProductResponseDTO
+Service --> Controller: ProductResponseDTO
+Controller --> Usuário: HTTP 200 OK
+
+== Deletar Produto ==
+Usuário -> Controller: DELETE /products/{id}
+Controller -> Service: deleteProduct(id)
+Service -> ProductRepo: existsById(id)
+ProductRepo --> Service: boolean (false → exceção)
+Service -> ProductRepo: deleteById(id)
+Service --> Controller: void
+Controller --> Usuário: HTTP 204 No Content
+
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+title Diagrama de Implantação - Controle de Estoque (AWS)
+
+node "Usuário" as User {
+  artifact "Navegador / Cliente HTTP"
+}
+
+node "AWS Cloud" {
+
+  node "VPC (Rede Privada Virtual)" {
+
+    node "Sub-rede Pública" {
+      node "Elastic Load Balancer" as ELB
+    }
+
+    node "Sub-rede Privada" {
+      node "ECS Cluster" {
+        component "Spring Boot API\n(Docker Container)" as API
+      }
+
+      node "Amazon RDS" {
+        database "PostgreSQL" as DB
+      }
+    }
+  }
+}
+
+User --> ELB : HTTPS Request
+ELB --> API : encaminha requisições REST
+API --> DB : JDBC / JPA Connection (porta 5432)
+
+@enduml

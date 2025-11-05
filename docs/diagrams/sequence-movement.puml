@@ -1,0 +1,82 @@
+@startuml
+title Fluxo de Movimentações (CRUD Completo)
+
+actor Usuário
+participant "MovementController" as Controller
+participant "MovementService" as Service
+participant "MovementRepository" as MovementRepo
+participant "ProductRepository" as ProductRepo
+participant "MovementMapper" as Mapper
+participant "Product" as Product
+participant "Movement" as Movement
+
+== Criar Movimento ==
+Usuário -> Controller: POST /movements (MovementRequestDTO)
+Controller -> Service: createMovement(data)
+Service -> ProductRepo: findById(data.productId)
+ProductRepo --> Service: Product (ou exceção se não encontrado)
+
+Service -> Mapper: toEntity(data, product)
+Mapper --> Service: Movement
+
+Service -> Service: ajustarEstoqueProduto(movement, product)
+Service -> MovementRepo: save(movement)
+MovementRepo --> Service: Movement salvo
+
+Service -> Mapper: toResponseDTO(saved)
+Mapper --> Service: MovementResponseDTO
+Service --> Controller: MovementResponseDTO
+Controller --> Usuário: HTTP 201 Created
+
+== Listar Movimentos ==
+Usuário -> Controller: GET /movements
+Controller -> Service: getAllMovements(pageable)
+Service -> MovementRepo: findAll(pageable)
+MovementRepo --> Service: Page<Movement>
+Service -> Mapper: map each Movement → MovementResponseDTO
+Mapper --> Service: Page<MovementResponseDTO>
+Service --> Controller: Page<MovementResponseDTO>
+Controller --> Usuário: HTTP 200 OK
+
+== Buscar Movimento por ID ==
+Usuário -> Controller: GET /movements/{id}
+Controller -> Service: getMovementById(id)
+Service -> MovementRepo: findById(id)
+MovementRepo --> Service: Movement (ou exceção)
+Service -> Mapper: toResponseDTO(movement)
+Mapper --> Service: MovementResponseDTO
+Service --> Controller: MovementResponseDTO
+Controller --> Usuário: HTTP 200 OK
+
+== Atualizar Movimento ==
+Usuário -> Controller: PUT /movements/{id}
+Controller -> Service: updateMovement(id, data)
+Service -> MovementRepo: findById(id)
+MovementRepo --> Service: Movement existente (ou exceção)
+
+Service -> ProductRepo: findById(data.productId)
+ProductRepo --> Service: Product (ou exceção)
+
+Service -> Service: desfazerEstoqueAnterior(existing, product)
+Service -> Service: atualizar dados do existing
+Service -> Service: ajustarEstoqueProduto(existing, product)
+
+Service -> ProductRepo: save(product)
+Service -> MovementRepo: save(existing)
+MovementRepo --> Service: Movement atualizado
+
+Service -> Mapper: toResponseDTO(updated)
+Mapper --> Service: MovementResponseDTO
+Service --> Controller: MovementResponseDTO
+Controller --> Usuário: HTTP 200 OK
+
+== Deletar Movimento ==
+Usuário -> Controller: DELETE /movements/{id}
+Controller -> Service: deleteMovement(id)
+Service -> MovementRepo: existsById(id)
+MovementRepo --> Service: boolean (false → exceção)
+Service -> MovementRepo: deleteById(id)
+Service --> Controller: void
+Controller --> Usuário: HTTP 204 No Content
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+title Diagrama de Classes - Controle de Estoque
+
+enum MovementType {
+  ENTRY
+  EXIT
+}
+
+class Category {
+  +Long id
+  +String name
+  +String size
+  +String packaging
+  +LocalDateTime createdAt
+  +LocalDateTime updatedAt
+}
+
+class Product {
+  +Long id
+  +String name
+  +BigDecimal unitPrice
+  +String unitOfMeasure
+  +int stockAvailable
+  +int minQuantity
+  +int maxQuantity
+  +LocalDateTime createdAt
+  +LocalDateTime updatedAt
+}
+
+class Movement {
+  +Long id
+  +LocalDate movementDate
+  +int quantity
+  +MovementType movementType
+  +String status
+  +LocalDateTime createdAt
+  +LocalDateTime updatedAt
+}
+
+Category "1" --> "*" Product : contém >
+Product "1" --> "*" Movement : possui >
+Movement --> MovementType : tipo >
+
+@enduml

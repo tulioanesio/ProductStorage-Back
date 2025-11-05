@@ -1,0 +1,66 @@
+@startuml
+title Fluxo de Categorias (CRUD Completo)
+
+actor Usuário
+participant "CategoryController" as Controller
+participant "CategoryService" as Service
+participant "CategoryRepository" as CategoryRepo
+participant "CategoryMapper" as Mapper
+participant "Category" as Category
+participant "CategoryResponseDTO" as Response
+
+== Criar Categoria ==
+Usuário -> Controller: POST /categories (CategoryRequestDTO)
+Controller -> Service: createCategory(request)
+Service -> Mapper: toEntity(request)
+Mapper --> Service: Category
+Service -> CategoryRepo: save(category)
+CategoryRepo --> Service: Category salvo
+Service -> Mapper: toResponse(category)
+Mapper --> Service: CategoryResponseDTO
+Service --> Controller: CategoryResponseDTO
+Controller --> Usuário: HTTP 201 Created
+
+== Listar Categorias ==
+Usuário -> Controller: GET /categories
+Controller -> Service: getAllCategories(pageable)
+Service -> CategoryRepo: findAll(pageable)
+CategoryRepo --> Service: Page<Category>
+Service -> Mapper: map each Category → CategoryResponseDTO
+Mapper --> Service: Page<CategoryResponseDTO>
+Service --> Controller: Page<CategoryResponseDTO>
+Controller --> Usuário: HTTP 200 OK
+
+== Buscar Categoria por ID ==
+Usuário -> Controller: GET /categories/{id}
+Controller -> Service: getCategoryById(id)
+Service -> CategoryRepo: findById(id)
+CategoryRepo --> Service: Category (ou exceção)
+Service -> Mapper: toResponse(category)
+Mapper --> Service: CategoryResponseDTO
+Service --> Controller: CategoryResponseDTO
+Controller --> Usuário: HTTP 200 OK
+
+== Atualizar Categoria ==
+Usuário -> Controller: PUT /categories/{id}
+Controller -> Service: updateCategory(id, data)
+Service -> CategoryRepo: findById(id)
+CategoryRepo --> Service: Category existente (ou exceção)
+Service -> Service: atualizar campos da Category
+Service -> CategoryRepo: save(category)
+CategoryRepo --> Service: Category atualizado
+Service -> Mapper: toResponse(category)
+Mapper --> Service: CategoryResponseDTO
+Service --> Controller: CategoryResponseDTO
+Controller --> Usuário: HTTP 200 OK
+
+== Deletar Categoria ==
+Usuário -> Controller: DELETE /categories/{id}
+Controller -> Service: deleteCategory(id)
+Service -> CategoryRepo: existsById(id)
+CategoryRepo --> Service: boolean (false → exceção)
+Service -> CategoryRepo: deleteById(id)
+Service --> Controller: void
+Controller --> Usuário: HTTP 204 No Content
+
+@enduml
