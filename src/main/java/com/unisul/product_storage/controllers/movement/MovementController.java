@@ -1,9 +1,7 @@
-package com.unisul.product_storage.controllers;
+package com.unisul.product_storage.controllers.movement;
 
-import com.unisul.product_storage.dtos.MovementRequestDTO;
-import com.unisul.product_storage.dtos.MovementResponseDTO;
-import com.unisul.product_storage.dtos.ProductRequestDTO;
-import com.unisul.product_storage.dtos.ProductResponseDTO;
+import com.unisul.product_storage.dtos.movement.MovementRequestDTO;
+import com.unisul.product_storage.dtos.movement.MovementResponseDTO;
 import com.unisul.product_storage.services.MovementService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -14,13 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/movements")
-public class MovementController {
+public class MovementController implements SwaggerMovementController {
 
-    private MovementService movementService;
+    private final MovementService movementService;
 
     public MovementController(MovementService movementService) {
         this.movementService = movementService;
@@ -39,7 +35,7 @@ public class MovementController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MovementResponseDTO> getById(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(movementService.getProductById(id));
+        return ResponseEntity.ok(movementService.getMovementById(id));
     }
 
     @PutMapping("/{id}")
@@ -48,7 +44,7 @@ public class MovementController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<MovementResponseDTO> deleteById(@PathVariable("id") Long id) {
+    public ResponseEntity<Void> deleteById(@PathVariable("id") Long id) {
         movementService.deleteMovement(id);
         return ResponseEntity.noContent().build();
     }
