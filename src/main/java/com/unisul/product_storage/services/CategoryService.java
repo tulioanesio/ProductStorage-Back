@@ -21,7 +21,7 @@ public class CategoryService {
     }
 
     public CategoryResponseDTO createCategory(CategoryRequestDTO request) {
-        if (request.nome() == null || request.nome().isBlank()) {
+        if (request.name() == null || request.name().isBlank()) {
             throw new BusinessException(
                     HttpStatus.BAD_REQUEST,
                     "Nome inválido",
@@ -36,15 +36,6 @@ public class CategoryService {
 
     public Page<CategoryResponseDTO> getAllCategories(Pageable pageable) {
         Page<Category> categories = categoryRepository.findAll(pageable);
-
-        if (categories.isEmpty()) {
-            throw new BusinessException(
-                    HttpStatus.NOT_FOUND,
-                    "Nenhuma categoria encontrada",
-                    "A listagem de categorias retornou vazia."
-            );
-        }
-
         return categories.map(CategoryMapper::toResponse);
     }
 
@@ -66,9 +57,9 @@ public class CategoryService {
                         "Não foi possível atualizar. ID " + id + " não existe."
                 ));
 
-        existing.setNome(request.nome());
-        existing.setTamanho(request.tamanho());
-        existing.setEmbalagem(request.embalagem());
+        existing.setName(request.name());
+        existing.setSize(request.size());
+        existing.setPackaging(request.packaging());
 
         Category updated = categoryRepository.save(existing);
         return CategoryMapper.toResponse(updated);

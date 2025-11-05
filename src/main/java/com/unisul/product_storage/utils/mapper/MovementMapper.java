@@ -2,6 +2,7 @@ package com.unisul.product_storage.utils.mapper;
 
 import com.unisul.product_storage.dtos.movement.MovementRequestDTO;
 import com.unisul.product_storage.dtos.movement.MovementResponseDTO;
+import com.unisul.product_storage.dtos.product.ProductSummaryDTO;
 import com.unisul.product_storage.models.Movement;
 import com.unisul.product_storage.models.Product;
 
@@ -19,9 +20,18 @@ public class MovementMapper {
     }
 
     public static MovementResponseDTO toResponseDTO(Movement movement) {
+        Product product = movement.getProduct();
+
+        ProductSummaryDTO productDTO = new ProductSummaryDTO(
+                product.getId(),
+                product.getName(),
+                product.getUnitPrice(),
+                product.getUnitOfMeasure()
+        );
+
         return new MovementResponseDTO(
                 movement.getId(),
-                movement.getProduct(),
+                productDTO,
                 movement.getMovementDate(),
                 movement.getQuantity(),
                 movement.getMovementType(),

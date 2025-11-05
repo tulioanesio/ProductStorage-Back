@@ -14,10 +14,10 @@ public class ProductMapper {
         Product product = new Product();
         product.setName(dto.name());
         product.setUnitPrice(dto.unitPrice());
-        product.setUnit(dto.unit());
-        product.setStockQuantity(dto.stockQuantity());
-        product.setMinStockQuantity(dto.minStockQuantity());
-        product.setMaxStockQuantity(dto.maxStockQuantity());
+        product.setUnitOfMeasure(dto.unitOfMeasure());
+        product.setStockAvailable(dto.availableStock());
+        product.setMinQuantity(dto.minStockQuantity());
+        product.setMaxQuantity(dto.maxStockQuantity());
         product.setCategory(category);
         return product;
     }
@@ -25,10 +25,10 @@ public class ProductMapper {
     public void updateEntity(Product product, ProductRequestDTO dto, Category category) {
         product.setName(dto.name());
         product.setUnitPrice(dto.unitPrice());
-        product.setUnit(dto.unit());
-        product.setStockQuantity(dto.stockQuantity());
-        product.setMinStockQuantity(dto.minStockQuantity());
-        product.setMaxStockQuantity(dto.maxStockQuantity());
+        product.setUnitOfMeasure(dto.unitOfMeasure());
+        product.setStockAvailable(dto.availableStock());
+        product.setMinQuantity(dto.minStockQuantity());
+        product.setMaxQuantity(dto.maxStockQuantity());
         product.setCategory(category);
     }
 
@@ -39,9 +39,9 @@ public class ProductMapper {
         if (category != null) {
             categoryDTO = new CategoryResponseDTO(
                     category.getId(),
-                    category.getNome(),
-                    category.getTamanho(),
-                    category.getEmbalagem()
+                    category.getName(),
+                    category.getSize(),
+                    category.getPackaging()
             );
         }
 
@@ -49,10 +49,10 @@ public class ProductMapper {
                 product.getId(),
                 product.getName(),
                 product.getUnitPrice(),
-                product.getUnit(),
-                product.getStockQuantity(),
-                product.getMinStockQuantity(),
-                product.getMaxStockQuantity(),
+                product.getUnitOfMeasure(),
+                product.getStockAvailable(),
+                product.getMinQuantity(),
+                product.getMaxQuantity(),
                 categoryDTO
         );
     }

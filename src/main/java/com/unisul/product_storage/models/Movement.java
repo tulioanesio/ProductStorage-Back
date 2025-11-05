@@ -3,8 +3,9 @@ package com.unisul.product_storage.models;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@Entity
+@Entity(name = "movements")
 public class Movement {
 
     @Id
@@ -18,6 +19,9 @@ public class Movement {
     @Enumerated(EnumType.STRING)
     private MovementType movementType;
     private String status = "Normal";
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
 
     public Movement() {
     }
@@ -29,6 +33,17 @@ public class Movement {
         this.quantity = quantity;
         this.movementType = movementType;
         this.status = status;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -78,5 +93,8 @@ public class Movement {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }
 

@@ -1,8 +1,10 @@
 CREATE TABLE categories (
-                            id SERIAL PRIMARY KEY,
-                            nome VARCHAR(100) NOT NULL,
-                            tamanho VARCHAR(20),
-                            embalagem VARCHAR(20)
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    size VARCHAR(20),
+    packaging VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 ALTER TABLE products

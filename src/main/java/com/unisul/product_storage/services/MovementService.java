@@ -42,15 +42,6 @@ public class MovementService {
 
     public Page<MovementResponseDTO> getAllMovements(Pageable pageable) {
         Page<Movement> movements = movementRepository.findAll(pageable);
-
-        if (movements.isEmpty()) {
-            throw new BusinessException(
-                    HttpStatus.NOT_FOUND,
-                    "Nenhum movimento encontrado",
-                    "Não há registros de movimentações no sistema."
-            );
-        }
-
         return movements.map(MovementMapper::toResponseDTO);
     }
 
@@ -106,12 +97,12 @@ public class MovementService {
     }
 
     private void ajustarEstoqueProduto(Movement movement, Product product) {
-        int currentStock = product.getStockQuantity();
+        int currentStock = product.getStockAvailable();
         int qty = movement.getQuantity();
 
         if (movement.getMovementType() == MovementType.ENTRY) {
-            product.setStockQuantity(currentStock + qty);
-            if (product.getStockQuantity() > product.getMaxStockQuantity()) {
+            product.setStockAvailable(currentStock + qty);
+            if (product.getStockAvailable() > product.getMaxQuantity()) {
                 movement.setStatus("Estoque ultrapassou o limite máximo permitido!");
             }
         } else if (movement.getMovementType() == MovementType.EXIT) {
@@ -122,8 +113,8 @@ public class MovementService {
                         "Não há estoque suficiente para realizar esta saída."
                 );
             }
-            product.setStockQuantity(currentStock - qty);
-            if (product.getStockQuantity() < product.getMinStockQuantity()) {
+            product.setStockAvailable(currentStock - qty);
+            if (product.getStockAvailable() < product.getMinQuantity()) {
                 movement.setStatus("Estoque caiu abaixo do limite mínimo permitido!");
             }
         }
@@ -132,9 +123,9 @@ public class MovementService {
     private void desfazerEstoqueAnterior(Movement movement, Product product) {
         int qty = movement.getQuantity();
         if (movement.getMovementType() == MovementType.ENTRY) {
-            product.setStockQuantity(product.getStockQuantity() - qty);
+            product.setStockAvailable(product.getStockAvailable() - qty);
         } else if (movement.getMovementType() == MovementType.EXIT) {
-            product.setStockQuantity(product.getStockQuantity() + qty);
+            product.setStockAvailable(product.getStockAvailable() + qty);
         }
     }
 }

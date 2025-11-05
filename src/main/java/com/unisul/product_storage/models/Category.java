@@ -2,6 +2,8 @@ package com.unisul.product_storage.models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -11,36 +13,66 @@ public class Category {
     private Long id;
 
     @Column(nullable = false)
-    private String nome;
-
-    private String tamanho;
-    private String embalagem;
+    private String name;
+    private String size;
+    private String packaging;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public Category() {
     }
 
-    public Category(Long id, String nome, String tamanho, String embalagem) {
+    public Category(Long id, String name, String size, String packaging) {
         this.id = id;
-        this.nome = nome;
-        this.tamanho = tamanho;
-        this.embalagem = embalagem;
+        this.name = name;
+        this.size = size;
+        this.packaging = packaging;
     }
 
-    public Category(String nome, String tamanho, String embalagem) {
-        this.nome = nome;
-        this.tamanho = tamanho;
-        this.embalagem = embalagem;
+    public Category(String name, String size, String packaging) {
+        this.name = name;
+        this.size = size;
+        this.packaging = packaging;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public String getName() {
+        return name;
+    }
 
-    public String getTamanho() { return tamanho; }
-    public void setTamanho(String tamanho) { this.tamanho = tamanho; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public String getEmbalagem() { return embalagem; }
-    public void setEmbalagem(String embalagem) { this.embalagem = embalagem; }
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getPackaging() {
+        return packaging;
+    }
+
+    public void setPackaging(String packaging) {
+        this.packaging = packaging;
+    }
+
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }

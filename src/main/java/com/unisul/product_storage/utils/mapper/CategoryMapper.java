@@ -12,11 +12,11 @@ public class CategoryMapper {
     private CategoryMapper() {}
 
     public static Category toEntity(CategoryRequestDTO request) {
-        return new Category(request.nome(), request.tamanho(), request.embalagem());
+        return new Category(request.name(), request.size(), request.packaging());
     }
 
     public static CategoryResponseDTO toResponse(Category entity) {
-        return new CategoryResponseDTO(entity.getId(), entity.getNome(), entity.getTamanho(), entity.getEmbalagem());
+        return new CategoryResponseDTO(entity.getId(), entity.getName(), entity.getSize(), entity.getPackaging());
     }
 
     public static List<CategoryResponseDTO> toResponseList(List<Category> entities) {
