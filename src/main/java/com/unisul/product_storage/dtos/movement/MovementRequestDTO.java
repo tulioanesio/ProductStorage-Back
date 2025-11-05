@@ -35,7 +35,7 @@ public record MovementRequestDTO(
                 required = true
         )
         @NotNull(message = "A quantidade é obrigatória.")
-        @Min(value = 0, message = "A quantidade deve ser maior que zero.")
+        @Min(value = 0, message = "A quantidade não pode ser negativa.")
         int quantity,
 
         @Schema(

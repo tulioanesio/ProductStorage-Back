@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity(name = "movements")
+@Entity
+@Table(name = "movements")
 public class Movement {
 
     @Id
@@ -19,7 +20,9 @@ public class Movement {
     @Enumerated(EnumType.STRING)
     private MovementType movementType;
     private String status = "Normal";
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
 
