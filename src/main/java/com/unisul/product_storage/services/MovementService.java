@@ -102,7 +102,7 @@ public class MovementService {
 
         if (movement.getMovementType() == MovementType.ENTRY) {
             product.setStockAvailable(currentStock + qty);
-            if (product.getStockAvailable() > product.getMaxQuantity()) {
+            if (product.getStockAvailable() > product.getMaxStockQuantity()) {
                 movement.setStatus("Estoque ultrapassou o limite máximo permitido!");
             }
         } else if (movement.getMovementType() == MovementType.EXIT) {
@@ -114,7 +114,7 @@ public class MovementService {
                 );
             }
             product.setStockAvailable(currentStock - qty);
-            if (product.getStockAvailable() < product.getMinQuantity()) {
+            if (product.getStockAvailable() < product.getMinStockQuantity()) {
                 movement.setStatus("Estoque caiu abaixo do limite mínimo permitido!");
             }
         }

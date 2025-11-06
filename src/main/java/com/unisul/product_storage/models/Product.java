@@ -25,10 +25,10 @@ public class Product {
     private int stockAvailable;
 
     @Column(name = "min_quantity", nullable = false)
-    private int minQuantity;
+    private int minStockQuantity;
 
     @Column(name = "max_quantity")
-    private int maxQuantity;
+    private int maxStockQuantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -49,8 +49,8 @@ public class Product {
         this.unitPrice = unitPrice;
         this.unitOfMeasure = unitOfMeasure;
         this.stockAvailable = stockAvailable;
-        this.minQuantity = minQuantity;
-        this.maxQuantity = maxQuantity;
+        this.minStockQuantity = minQuantity;
+        this.maxStockQuantity = maxQuantity;
         this.category = category;
     }
 
@@ -80,11 +80,11 @@ public class Product {
     public int getStockAvailable() { return stockAvailable; }
     public void setStockAvailable(int stockAvailable) { this.stockAvailable = stockAvailable; }
 
-    public int getMinQuantity() { return minQuantity; }
-    public void setMinQuantity(int minQuantity) { this.minQuantity = minQuantity; }
+    public int getMinStockQuantity() { return minStockQuantity; }
+    public void setMinStockQuantity(int minStockQuantity) { this.minStockQuantity = minStockQuantity; }
 
-    public int getMaxQuantity() { return maxQuantity; }
-    public void setMaxQuantity(int maxQuantity) { this.maxQuantity = maxQuantity; }
+    public int getMaxStockQuantity() { return maxStockQuantity; }
+    public void setMaxStockQuantity(int maxQuantity) { this.maxStockQuantity = maxQuantity; }
 
     public Category getCategory() { return category; }
     public void setCategory(Category category) { this.category = category; }
