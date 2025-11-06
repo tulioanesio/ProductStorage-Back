@@ -2,6 +2,7 @@ package com.unisul.product_storage.services;
 
 import com.unisul.product_storage.dtos.report.InventoryBalanceDTO;
 import com.unisul.product_storage.dtos.report.InventoryBalanceResponseDTO;
+import com.unisul.product_storage.dtos.report.LowStockProductsDTO;
 import com.unisul.product_storage.dtos.report.PriceListDTO;
 import com.unisul.product_storage.repositories.ProductRepository;
 import com.unisul.product_storage.utils.mapper.ReportMapper;
@@ -31,6 +32,7 @@ public class ReportService {
         Page<InventoryBalanceDTO> inventoryPage = productRepository.findAll(pageable)
                 .map(reportMapper::toInventoryBalanceDTO);
 
+
         BigDecimal stockValue = productRepository.findAll().stream()
                 .map(product -> product.getUnitPrice()
                         .multiply(BigDecimal.valueOf(product.getStockAvailable())))
@@ -38,6 +40,13 @@ public class ReportService {
 
         return new InventoryBalanceResponseDTO(stockValue, inventoryPage);
     }
+
+    public Page<LowStockProductsDTO> getLowStockProducts(Pageable pageable) {
+        return productRepository.findLowStockProducts(pageable)
+                .map(reportMapper::toLowStockProductsDTO);
+    }
+
+
 
 
 }

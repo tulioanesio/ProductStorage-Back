@@ -2,6 +2,7 @@ package com.unisul.product_storage.utils.mapper;
 
 import com.unisul.product_storage.dtos.category.CategorySimpleDTO;
 import com.unisul.product_storage.dtos.report.InventoryBalanceDTO;
+import com.unisul.product_storage.dtos.report.LowStockProductsDTO;
 import com.unisul.product_storage.dtos.report.PriceListDTO;
 import com.unisul.product_storage.models.Product;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,14 @@ public class ReportMapper {
                 product.getName(),
                 product.getStockAvailable(),
                 totalValue
+        );
+    }
+
+    public LowStockProductsDTO toLowStockProductsDTO(Product product) {
+        return new LowStockProductsDTO(
+                product.getName(),
+                product.getStockAvailable(),
+                product.getMinStockQuantity()
         );
     }
 }

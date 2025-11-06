@@ -2,6 +2,7 @@ package com.unisul.product_storage.controllers.report;
 
 import com.unisul.product_storage.dtos.report.InventoryBalanceDTO;
 import com.unisul.product_storage.dtos.report.InventoryBalanceResponseDTO;
+import com.unisul.product_storage.dtos.report.LowStockProductsDTO;
 import com.unisul.product_storage.dtos.report.PriceListDTO;
 import com.unisul.product_storage.services.ReportService;
 import org.springframework.data.domain.Page;
@@ -40,6 +41,15 @@ public class ReportController {
             Pageable pageable
     ) {
         InventoryBalanceResponseDTO response = reportService.getInventoryBalance(pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/low-stock-products")
+    public ResponseEntity<Page<LowStockProductsDTO>> getLowStockProducts(
+            @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.ASC)
+            Pageable pageable
+    ) {
+        Page<LowStockProductsDTO> response = reportService.getLowStockProducts(pageable);
         return ResponseEntity.ok(response);
     }
 
