@@ -1,9 +1,6 @@
 package com.unisul.product_storage.controllers.report;
 
-import com.unisul.product_storage.dtos.report.InventoryBalanceDTO;
-import com.unisul.product_storage.dtos.report.InventoryBalanceResponseDTO;
-import com.unisul.product_storage.dtos.report.LowStockProductsDTO;
-import com.unisul.product_storage.dtos.report.PriceListDTO;
+import com.unisul.product_storage.dtos.report.*;
 import com.unisul.product_storage.services.ReportService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/reports")
@@ -53,5 +51,9 @@ public class ReportController {
         return ResponseEntity.ok(response);
     }
 
-
+    @GetMapping("/products-by-category")
+    public ResponseEntity<List<ProductsByCategoryDTO>> getProductsByCategory() {
+        List<ProductsByCategoryDTO> report = reportService.getProductsByCategory();
+        return ResponseEntity.ok(report);
+    }
 }

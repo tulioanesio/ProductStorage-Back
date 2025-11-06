@@ -4,6 +4,8 @@ import com.unisul.product_storage.dtos.category.CategorySimpleDTO;
 import com.unisul.product_storage.dtos.report.InventoryBalanceDTO;
 import com.unisul.product_storage.dtos.report.LowStockProductsDTO;
 import com.unisul.product_storage.dtos.report.PriceListDTO;
+import com.unisul.product_storage.dtos.report.ProductsByCategoryDTO;
+import com.unisul.product_storage.models.Category;
 import com.unisul.product_storage.models.Product;
 import org.springframework.stereotype.Component;
 

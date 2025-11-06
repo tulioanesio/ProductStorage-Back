@@ -1,9 +1,6 @@
 package com.unisul.product_storage.services;
 
-import com.unisul.product_storage.dtos.report.InventoryBalanceDTO;
-import com.unisul.product_storage.dtos.report.InventoryBalanceResponseDTO;
-import com.unisul.product_storage.dtos.report.LowStockProductsDTO;
-import com.unisul.product_storage.dtos.report.PriceListDTO;
+import com.unisul.product_storage.dtos.report.*;
 import com.unisul.product_storage.repositories.ProductRepository;
 import com.unisul.product_storage.utils.mapper.ReportMapper;
 import org.springframework.data.domain.Page;
@@ -11,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
@@ -44,6 +43,17 @@ public class ReportService {
     public Page<LowStockProductsDTO> getLowStockProducts(Pageable pageable) {
         return productRepository.findLowStockProducts(pageable)
                 .map(reportMapper::toLowStockProductsDTO);
+    }
+
+    public List<ProductsByCategoryDTO> getProductsByCategory() {
+        List<Object[]> results = productRepository.countProductsByCategory();
+
+        return results.stream()
+                .map(result -> new ProductsByCategoryDTO(
+                        (String) result[0],
+                        ((Number) result[1]).intValue()
+                ))
+                .collect(Collectors.toList());
     }
 
 
