@@ -16,8 +16,8 @@ public class ProductMapper {
         product.setUnitPrice(dto.unitPrice());
         product.setUnitOfMeasure(dto.unitOfMeasure());
         product.setStockAvailable(dto.availableStock());
-        product.setMinQuantity(dto.minStockQuantity());
-        product.setMaxQuantity(dto.maxStockQuantity());
+        product.setMinStockQuantity(dto.minStockQuantity());
+        product.setMaxStockQuantity(dto.maxStockQuantity());
         product.setCategory(category);
         return product;
     }
@@ -27,8 +27,8 @@ public class ProductMapper {
         product.setUnitPrice(dto.unitPrice());
         product.setUnitOfMeasure(dto.unitOfMeasure());
         product.setStockAvailable(dto.availableStock());
-        product.setMinQuantity(dto.minStockQuantity());
-        product.setMaxQuantity(dto.maxStockQuantity());
+        product.setMinStockQuantity(dto.minStockQuantity());
+        product.setMaxStockQuantity(dto.maxStockQuantity());
         product.setCategory(category);
     }
 
@@ -51,8 +51,8 @@ public class ProductMapper {
                 product.getUnitPrice(),
                 product.getUnitOfMeasure(),
                 product.getStockAvailable(),
-                product.getMinQuantity(),
-                product.getMaxQuantity(),
+                product.getMinStockQuantity(),
+                product.getMaxStockQuantity(),
                 categoryDTO
         );
     }
