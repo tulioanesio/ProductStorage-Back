@@ -8,7 +8,7 @@ public record ProductResponseDTO(
         String name,
         BigDecimal unitPrice,
         String unitOfMeasure,
-        int stockAvailable,
+        int availableStock,
         int minQuantity,
         int maxQuantity,
         CategoryResponseDTO category
