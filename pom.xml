@@ -157,7 +157,7 @@
                             </rules>
                             <includes>
                                 <include>com/unisul/product_storage/services/**/*.class</include>
-                                <include>com/unisul/product_storage/utils/mapper/**/*.class</include>
+                                <include>com/unisul/product_storage/utils/mappers/**/*.class</include>
                                 <include>com/unisul/product_storage/repositories/**/*.class</include>
                             </includes>
                         </configuration>
