@@ -57,7 +57,7 @@ jobs:
 
       - name: Generate coverage badge and summary
         if: always()
-        uses: cicirello/jacoco-badge-generator@v3
+        uses: cicirello/jacoco-badge-generator@v3.3.0
         with:
           jacoco-csv-file: target/site/jacoco/jacoco.csv
           coverage-badge-filename: jacoco.svg
