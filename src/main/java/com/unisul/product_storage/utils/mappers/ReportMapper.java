@@ -1,4 +1,4 @@
-package com.unisul.product_storage.utils.mapper;
+package com.unisul.product_storage.utils.mappers;
 
 import com.unisul.product_storage.dtos.category.CategorySimpleDTO;
 import com.unisul.product_storage.dtos.report.inventory_balance.InventoryBalanceDTO;
