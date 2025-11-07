@@ -114,7 +114,7 @@
                     <includes>
                         <include>**/controllers/**/*Test.java</include>
                         <include>**/services/**/*Test.java</include>
-                        <include>**/utils/mapper/**/*Test.java</include>
+                        <include>**/utils/mappers/**/*Test.java</include>
                     </includes>
                 </configuration>
             </plugin>
