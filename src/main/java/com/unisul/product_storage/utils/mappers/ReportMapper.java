@@ -1,11 +1,9 @@
 package com.unisul.product_storage.utils.mapper;
 
 import com.unisul.product_storage.dtos.category.CategorySimpleDTO;
-import com.unisul.product_storage.dtos.report.InventoryBalanceDTO;
-import com.unisul.product_storage.dtos.report.LowStockProductsDTO;
-import com.unisul.product_storage.dtos.report.PriceListDTO;
-import com.unisul.product_storage.dtos.report.ProductsByCategoryDTO;
-import com.unisul.product_storage.models.Category;
+import com.unisul.product_storage.dtos.report.inventory_balance.InventoryBalanceDTO;
+import com.unisul.product_storage.dtos.report.low_stock_products.LowStockProductsResponseDTO;
+import com.unisul.product_storage.dtos.report.price_list.PriceListResponseDTO;
 import com.unisul.product_storage.models.Product;
 import org.springframework.stereotype.Component;
 
@@ -14,14 +12,14 @@ import java.math.BigDecimal;
 @Component
 public class ReportMapper {
 
-    public PriceListDTO toPriceListDTO(Product product) {
-        return new PriceListDTO(
+    public PriceListResponseDTO toPriceListDTO(Product product) {
+        return new PriceListResponseDTO(
                 product.getName(),
                 product.getUnitPrice(),
                 product.getUnitOfMeasure(),
                 new CategorySimpleDTO(
-                        product.getCategory().getId(),
-                        product.getCategory().getName()
+                        product.getCategory() != null ? product.getCategory().getId() : null,
+                        product.getCategory() != null ? product.getCategory().getName() : "Sem categoria"
                 )
         );
     }
@@ -36,8 +34,8 @@ public class ReportMapper {
         );
     }
 
-    public LowStockProductsDTO toLowStockProductsDTO(Product product) {
-        return new LowStockProductsDTO(
+    public LowStockProductsResponseDTO toLowStockProductsDTO(Product product) {
+        return new LowStockProductsResponseDTO(
                 product.getName(),
                 product.getStockAvailable(),
                 product.getMinStockQuantity()
