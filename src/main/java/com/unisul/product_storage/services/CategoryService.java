@@ -5,7 +5,7 @@ import com.unisul.product_storage.dtos.category.CategoryResponseDTO;
 import com.unisul.product_storage.exceptions.handler.BusinessException;
 import com.unisul.product_storage.models.Category;
 import com.unisul.product_storage.repositories.CategoryRepository;
-import com.unisul.product_storage.utils.mapper.CategoryMapper;
+import com.unisul.product_storage.utils.mappers.CategoryMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

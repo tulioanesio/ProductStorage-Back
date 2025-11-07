@@ -8,7 +8,7 @@ import com.unisul.product_storage.models.MovementType;
 import com.unisul.product_storage.models.Product;
 import com.unisul.product_storage.repositories.MovementRepository;
 import com.unisul.product_storage.repositories.ProductRepository;
-import com.unisul.product_storage.utils.mapper.MovementMapper;
+import com.unisul.product_storage.utils.mappers.MovementMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -104,6 +104,8 @@ public class MovementService {
             product.setStockAvailable(currentStock + qty);
             if (product.getStockAvailable() > product.getMaxStockQuantity()) {
                 movement.setStatus("Estoque ultrapassou o limite máximo permitido!");
+            } else {
+                movement.setStatus("Normal");
             }
         } else if (movement.getMovementType() == MovementType.EXIT) {
             if (currentStock < qty) {
@@ -116,6 +118,8 @@ public class MovementService {
             product.setStockAvailable(currentStock - qty);
             if (product.getStockAvailable() < product.getMinStockQuantity()) {
                 movement.setStatus("Estoque caiu abaixo do limite mínimo permitido!");
+            } else {
+                movement.setStatus("Normal");
             }
         }
     }

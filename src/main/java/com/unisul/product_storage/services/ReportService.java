@@ -1,13 +1,20 @@
 package com.unisul.product_storage.services;
 
-import com.unisul.product_storage.dtos.report.*;
+import com.unisul.product_storage.dtos.report.inventory_balance.InventoryBalanceDTO;
+import com.unisul.product_storage.dtos.report.inventory_balance.InventoryBalanceResponseDTO;
+import com.unisul.product_storage.dtos.report.low_stock_products.LowStockProductsResponseDTO;
+import com.unisul.product_storage.dtos.report.most_movement_product.MostProductMovementResponseDTO;
+import com.unisul.product_storage.dtos.report.price_list.PriceListResponseDTO;
+import com.unisul.product_storage.dtos.report.products_by_category.ProductsByCategoryResponseDTO;
+import com.unisul.product_storage.repositories.MovementRepository;
 import com.unisul.product_storage.repositories.ProductRepository;
-import com.unisul.product_storage.utils.mapper.ReportMapper;
+import com.unisul.product_storage.utils.mappers.ReportMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,14 +22,17 @@ import java.util.stream.Collectors;
 public class ReportService {
 
     private final ProductRepository productRepository;
+    private final MovementRepository movementRepository;
     private final ReportMapper reportMapper;
 
-    public ReportService(ProductRepository productRepository, ReportMapper reportMapper) {
+
+    public ReportService(ProductRepository productRepository, MovementRepository movementRepository, ReportMapper reportMapper) {
         this.productRepository = productRepository;
+        this.movementRepository = movementRepository;
         this.reportMapper = reportMapper;
     }
 
-    public Page<PriceListDTO> getPriceList(Pageable pageable) {
+    public Page<PriceListResponseDTO> getPriceList(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(reportMapper::toPriceListDTO);
     }
@@ -31,32 +41,64 @@ public class ReportService {
         Page<InventoryBalanceDTO> inventoryPage = productRepository.findAll(pageable)
                 .map(reportMapper::toInventoryBalanceDTO);
 
-
-        BigDecimal stockValue = productRepository.findAll().stream()
-                .map(product -> product.getUnitPrice()
-                        .multiply(BigDecimal.valueOf(product.getStockAvailable())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal stockValue = productRepository.calculateTotalStockValue();
 
         return new InventoryBalanceResponseDTO(stockValue, inventoryPage);
     }
 
-    public Page<LowStockProductsDTO> getLowStockProducts(Pageable pageable) {
+    public Page<LowStockProductsResponseDTO> getLowStockProducts(Pageable pageable) {
         return productRepository.findLowStockProducts(pageable)
                 .map(reportMapper::toLowStockProductsDTO);
     }
 
-    public List<ProductsByCategoryDTO> getProductsByCategory() {
-        List<Object[]> results = productRepository.countProductsByCategory();
+    public List<ProductsByCategoryResponseDTO> getProductsByCategory(Long categoryId) {
+        List<Object[]> results;
+
+        if (categoryId != null) {
+            results = productRepository.countProductsByCategoryId(categoryId);
+        } else {
+            results = productRepository.countProductsByCategory();
+        }
+
+        if (results == null || results.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         return results.stream()
-                .map(result -> new ProductsByCategoryDTO(
+                .map(result -> new ProductsByCategoryResponseDTO(
                         (String) result[0],
                         ((Number) result[1]).intValue()
                 ))
                 .collect(Collectors.toList());
     }
 
+    public List<MostProductMovementResponseDTO> getMostOutputProduct() {
+        List<Object[]> resultList = movementRepository.findTopProductBySaida();
 
+        if (resultList.isEmpty()) {
+            return Collections.emptyList();
+        }
 
+        return resultList.stream()
+                .map(row -> new MostProductMovementResponseDTO(
+                        (String) row[0],
+                        ((Number) row[1]).intValue()
+                ))
+                .toList();
+    }
 
+    public List<MostProductMovementResponseDTO> getMostInputProduct() {
+        List<Object[]> resultList = movementRepository.findTopProductByEntrada();
+
+        if (resultList.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return resultList.stream()
+                .map(row -> new MostProductMovementResponseDTO(
+                        (String) row[0],
+                        ((Number) row[1]).intValue()
+                ))
+                .toList();
+    }
 }

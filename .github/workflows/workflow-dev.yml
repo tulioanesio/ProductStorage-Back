@@ -1,4 +1,4 @@
-name: 'Workflow Dev'
+name: 'Dev Workflow'
 
 on:
   pull_request:
@@ -6,40 +6,65 @@ on:
     inputs:
       run_mode:
         type: choice
-        description: 'O que deseja fazer'
+        description: 'O que deseja fazer?'
         required: true
-        default: 'Somente Build'
+        default: 'Apenas build'
         options:
           - 'Build + Testes'
-          - 'Somente Build'
+          - 'Apenas build'
 
 jobs:
-  build-e-teste:
-    name: Build e Teste
+  build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
 
     steps:
-      - name: Baixando o código
+      - name: Checkout source code
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
           fetch-depth: 0
 
-      - name: Configurar JDK 21
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Executar Build + Testes
+      - name: Run Build + Testes (with coverage check)
         if: ${{ github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'Build + Testes') }}
         env:
           SPRING_PROFILES_ACTIVE: test
-        run: mvn -B clean package --file pom.xml
+        run: mvn -B clean verify --file pom.xml
 
-      - name: Executar Apenas Build
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'Somente Build' }}
+      - name: Run Apenas build (skip tests)
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'Apenas build' }}
         env:
           SPRING_PROFILES_ACTIVE: test
         run: mvn -B clean package -DskipTests --file pom.xml
+
+      - name: Generate Jacoco report
+        if: always()
+        run: mvn jacoco:report
+
+      - name: Upload Jacoco coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
+
+      - name: Generate coverage badge and summary
+        if: always()
+        uses: cicirello/jacoco-badge-generator@v3.3.0
+        with:
+          jacoco-csv-file: target/site/jacoco/jacoco.csv
+          coverage-badge-filename: jacoco.svg
+
+      - name: Upload Jacoco badge
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-badge
+          path: jacoco.svg

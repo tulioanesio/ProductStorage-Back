@@ -7,7 +7,7 @@ import com.unisul.product_storage.models.Category;
 import com.unisul.product_storage.models.Product;
 import com.unisul.product_storage.repositories.CategoryRepository;
 import com.unisul.product_storage.repositories.ProductRepository;
-import com.unisul.product_storage.utils.mapper.ProductMapper;
+import com.unisul.product_storage.utils.mappers.ProductMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
