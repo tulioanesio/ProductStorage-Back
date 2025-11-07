@@ -1,11 +1,11 @@
-package com.unisul.product_storage.dtos.report;
+package com.unisul.product_storage.dtos.report.most_movement_product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 @Schema(description = "DTO representando o produto com maior entrada ou saída no estoque")
-public record TopProductMovementDTO(
+public record MostProductMovementResponseDTO(
 
         @Schema(description = "Nome do produto", example = "Notebook Dell Inspiron")
         @NotBlank(message = "O nome do produto não pode estar vazio")

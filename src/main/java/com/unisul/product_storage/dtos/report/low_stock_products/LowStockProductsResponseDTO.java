@@ -1,9 +1,9 @@
-package com.unisul.product_storage.dtos.report;
+package com.unisul.product_storage.dtos.report.low_stock_products;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Produtos com nível de estoque abaixo do mínimo definido.")
-public record LowStockProductsDTO(
+public record LowStockProductsResponseDTO(
 
         @Schema(description = "Nome do produto.", example = "Mouse Logitech M170")
         String name,

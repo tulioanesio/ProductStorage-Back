@@ -1,7 +1,8 @@
-package com.unisul.product_storage.dtos.report;
+package com.unisul.product_storage.dtos.report.inventory_balance;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.data.domain.Page;
+
 import java.math.BigDecimal;
 
 @Schema(description = "Resposta completa do relatório de balanço de estoque.")

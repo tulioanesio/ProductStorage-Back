@@ -1,6 +1,7 @@
-package com.unisul.product_storage.dtos.report;
+package com.unisul.product_storage.dtos.report.inventory_balance;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.math.BigDecimal;
 
 @Schema(description = "Resumo do balanço de estoque de um produto.")
