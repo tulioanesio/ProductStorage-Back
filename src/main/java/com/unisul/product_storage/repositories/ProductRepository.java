@@ -17,6 +17,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.stockAvailable < p.minStockQuantity")
     Page<Product> findLowStockProducts(Pageable pageable);
 
+    @Query("SELECT p FROM Product p WHERE p.stockAvailable > p.maxStockQuantity")
+    Page<Product> findHighStockProducts(Pageable pageable);
+
     @Query("""
            SELECT c.name AS categoryName, COUNT(DISTINCT p.id) AS productCount
            FROM Product p
