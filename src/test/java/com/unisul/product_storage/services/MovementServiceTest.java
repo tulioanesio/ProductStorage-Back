@@ -89,7 +89,7 @@ class MovementServiceTest {
             MovementResponseDTO result = service.createMovement(dto);
 
             assertEquals(53, product.getStockAvailable());
-            assertEquals("Estoque ultrapassou o limite máximo permitido!", result.status());
+            assertEquals("Acima do limite permitido!", result.status());
         }
 
         @Test
@@ -114,7 +114,7 @@ class MovementServiceTest {
             MovementResponseDTO result = service.createMovement(dto);
 
             assertEquals(1, product.getStockAvailable());
-            assertEquals("Estoque caiu abaixo do limite mínimo permitido!", result.status());
+            assertEquals("Abaixo do limite permitido!", result.status());
         }
 
         @Test
@@ -334,7 +334,7 @@ class MovementServiceTest {
             MovementResponseDTO updated = service.updateMovement(1L, dto);
 
             assertEquals(53, product.getStockAvailable());
-            assertEquals("Estoque ultrapassou o limite máximo permitido!", updated.status());
+            assertEquals("Acima do limite permitido!", updated.status());
         }
 
         @Test
@@ -358,7 +358,7 @@ class MovementServiceTest {
             MovementResponseDTO result = service.updateMovement(1L, dto);
 
             assertEquals(0, product.getStockAvailable());
-            assertEquals("Estoque caiu abaixo do limite mínimo permitido!", result.status());
+            assertEquals("Abaixo do limite permitido!", result.status());
         }
     }
 
@@ -376,52 +376,59 @@ class MovementServiceTest {
         @Test
         @DisplayName("Deve chamar deleteById quando ID existir")
         void deleteMovement_ShouldDelete_WhenExists() {
-            when(movementRepository.existsById(1L)).thenReturn(true);
+            Movement movement = new Movement();
+            movement.setId(1L);
+
+            when(movementRepository.findById(1L))
+                    .thenReturn(Optional.of(movement));
+
             doNothing().when(movementRepository).deleteById(1L);
 
             assertDoesNotThrow(() -> service.deleteMovement(1L));
-            verify(movementRepository, times(1)).deleteById(1L);
-        }
-    }
 
-    @Nested
-    @DisplayName("Testes de Cobertura de Branch (Paths Nulos)")
-    class BranchCoverageTests {
-
-        @Test
-        @DisplayName("Deve cobrir branch 'else' em ajustarEstoqueProduto com tipo nulo")
-        void createMovement_ShouldCoverElseBranch_WhenMovementTypeIsNull() {
-            product.setStockAvailable(10);
-            MovementRequestDTO dto = new MovementRequestDTO(1L, today, 5, null);
-            when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-            when(movementRepository.save(any(Movement.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-            MovementResponseDTO result = service.createMovement(dto);
-
-            assertEquals(10, product.getStockAvailable());
-            assertEquals(5, result.quantity());
-            assertEquals("Normal", result.status());
+            verify(movementRepository).findById(1L);
+            verify(movementRepository).deleteById(1L);
         }
 
-        @Test
-        @DisplayName("Deve cobrir branch 'else' em desfazerEstoqueAnterior com tipo nulo")
-        void updateMovement_ShouldCoverElseBranch_WhenOriginalMovementTypeIsNull() {
-            product.setStockAvailable(10);
+        @Nested
+        @DisplayName("Testes de Cobertura de Branch (Paths Nulos)")
+        class BranchCoverageTests {
 
-            Movement movement = new Movement();
-            movement.setMovementType(null);
-            movement.setQuantity(5);
-            movement.setProduct(product);
+            @Test
+            @DisplayName("Deve cobrir branch 'else' em ajustarEstoqueProduto com tipo nulo")
+            void createMovement_ShouldCoverElseBranch_WhenMovementTypeIsNull() {
+                product.setStockAvailable(10);
+                MovementRequestDTO dto = new MovementRequestDTO(1L, today, 5, null);
+                when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+                when(movementRepository.save(any(Movement.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-            MovementRequestDTO dto = new MovementRequestDTO(1L, today, 3, MovementType.ENTRY);
+                MovementResponseDTO result = service.createMovement(dto);
 
-            when(movementRepository.findById(1L)).thenReturn(Optional.of(movement));
-            when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-            when(movementRepository.save(any(Movement.class))).thenAnswer(invocation -> invocation.getArgument(0));
+                assertEquals(10, product.getStockAvailable());
+                assertEquals(5, result.quantity());
+                assertEquals("Normal", result.status());
+            }
 
-            service.updateMovement(1L, dto);
+            @Test
+            @DisplayName("Deve cobrir branch 'else' em desfazerEstoqueAnterior com tipo nulo")
+            void updateMovement_ShouldCoverElseBranch_WhenOriginalMovementTypeIsNull() {
+                product.setStockAvailable(10);
 
-            assertEquals(13, product.getStockAvailable());
+                Movement movement = new Movement();
+                movement.setMovementType(null);
+                movement.setQuantity(5);
+                movement.setProduct(product);
+
+                MovementRequestDTO dto = new MovementRequestDTO(1L, today, 3, MovementType.ENTRY);
+
+                when(movementRepository.findById(1L)).thenReturn(Optional.of(movement));
+                when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+                when(movementRepository.save(any(Movement.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+                service.updateMovement(1L, dto);
+
+                assertEquals(13, product.getStockAvailable());
+            }
         }
     }
 }
