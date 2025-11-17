@@ -86,7 +86,7 @@ class CategoryServiceTest {
         void getAllCategories_ShouldReturnPagedDTOs() {
             when(repository.findAll(any(PageRequest.class))).thenReturn(new PageImpl<>(List.of(category)));
 
-            var result = service.getAllCategories(PageRequest.of(0, 10));
+            var result = service.getAllCategories(null, PageRequest.of(0, 10));
 
             assertEquals(1, result.getTotalElements());
             assertEquals("Eletrônicos", result.getContent().get(0).name());

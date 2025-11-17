@@ -49,19 +49,41 @@ class ProductControllerTest {
 
     @Test
     void shouldGetAllProducts() {
+        String name = null;
         Pageable pageable = PageRequest.of(0, 20);
-        Page<ProductResponseDTO> page = new PageImpl<>(List.of(new ProductResponseDTO(1L, "Notebook", BigDecimal.valueOf(3000), "unidade", 10, 2, 20, null)));
+        Page<ProductResponseDTO> page =
+                new PageImpl<>(List.of(new ProductResponseDTO(1L, "Notebook",
+                        BigDecimal.valueOf(3000), "unidade", 10, 2, 20, null)));
 
-        when(service.getAllProducts(pageable)).thenReturn(page);
+        when(service.getAllProducts(name, pageable)).thenReturn(page);
 
-        ResponseEntity<Page<ProductResponseDTO>> result = controller.getAll(pageable);
+        ResponseEntity<Page<ProductResponseDTO>> result = controller.getAll(name, pageable);
 
         assertThat(result.getBody().getContent()).hasSize(1);
     }
 
     @Test
+    void shouldGetAllProductsWithNameFilter() {
+        String name = "note";
+        Pageable pageable = PageRequest.of(0, 20);
+        Page<ProductResponseDTO> page =
+                new PageImpl<>(List.of(new ProductResponseDTO(1L, "Notebook",
+                        BigDecimal.valueOf(3000), "unidade", 10, 2, 20, null)));
+
+        when(service.getAllProducts(name, pageable)).thenReturn(page);
+
+        ResponseEntity<Page<ProductResponseDTO>> result = controller.getAll(name, pageable);
+
+        assertThat(result.getBody().getContent()).hasSize(1);
+        verify(service).getAllProducts(name, pageable);
+    }
+
+    @Test
     void shouldGetProductById() {
-        ProductResponseDTO response = new ProductResponseDTO(1L, "Notebook", BigDecimal.valueOf(3000), "unidade", 10, 2, 20, null);
+        ProductResponseDTO response =
+                new ProductResponseDTO(1L, "Notebook", BigDecimal.valueOf(3000),
+                        "unidade", 10, 2, 20, null);
+
         when(service.getProductById(1L)).thenReturn(response);
 
         ResponseEntity<ProductResponseDTO> result = controller.getById(1L);
@@ -71,8 +93,11 @@ class ProductControllerTest {
 
     @Test
     void shouldUpdateProduct() {
-        ProductRequestDTO request = new ProductRequestDTO("Mouse", BigDecimal.valueOf(100), "unidade", 50, 5, 100, 1L);
-        ProductResponseDTO response = new ProductResponseDTO(1L, "Mouse", BigDecimal.valueOf(100), "unidade", 50, 5, 100, null);
+        ProductRequestDTO request =
+                new ProductRequestDTO("Mouse", BigDecimal.valueOf(100), "unidade", 50, 5, 100, 1L);
+
+        ProductResponseDTO response =
+                new ProductResponseDTO(1L, "Mouse", BigDecimal.valueOf(100), "unidade", 50, 5, 100, null);
 
         when(service.updateProduct(1L, request)).thenReturn(response);
 

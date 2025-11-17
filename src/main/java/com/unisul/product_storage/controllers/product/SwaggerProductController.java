@@ -14,12 +14,18 @@ public interface SwaggerProductController {
 
     @Operation(summary = "Criar um novo produto", description = "Cria um novo produto no sistema")
     ResponseEntity<ProductResponseDTO> create(
-            @Parameter(description = "Dados do produto a serem criados", required = true)
+            @Parameter(description = "Dados do produto a ser criado", required = true)
             ProductRequestDTO data
     );
 
-    @Operation(summary = "Listar todos os produtos", description = "Retorna uma lista paginada de produtos")
+    @Operation(
+            summary = "Listar todos os produtos",
+            description = "Retorna uma lista paginada de produtos, com opção de filtro por nome"
+    )
     ResponseEntity<Page<ProductResponseDTO>> getAll(
+            @Parameter(description = "Filtro opcional pelo nome do produto", example = "Celular")
+            String name,
+
             @Parameter(description = "Informações de paginação e ordenação")
             Pageable pageable
     );
@@ -30,15 +36,16 @@ public interface SwaggerProductController {
             Long id
     );
 
-    @Operation(summary = "Atualizar produto", description = "Atualiza os dados de um produto pelo seu ID")
+    @Operation(summary = "Atualizar produto", description = "Atualiza um produto pelo seu ID")
     ResponseEntity<ProductResponseDTO> update(
             @Parameter(description = "ID do produto a ser atualizado", example = "1", required = true)
             Long id,
+
             @Parameter(description = "Dados atualizados do produto", required = true)
             ProductRequestDTO data
     );
 
-    @Operation(summary = "Deletar produto", description = "Remove um produto do sistema pelo seu ID")
+    @Operation(summary = "Deletar produto", description = "Remove um produto pelo seu ID")
     ResponseEntity<Void> delete(
             @Parameter(description = "ID do produto a ser deletado", example = "1", required = true)
             Long id

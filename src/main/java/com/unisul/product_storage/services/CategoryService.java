@@ -2,8 +2,10 @@ package com.unisul.product_storage.services;
 
 import com.unisul.product_storage.dtos.category.CategoryRequestDTO;
 import com.unisul.product_storage.dtos.category.CategoryResponseDTO;
+import com.unisul.product_storage.dtos.product.ProductResponseDTO;
 import com.unisul.product_storage.exceptions.handler.BusinessException;
 import com.unisul.product_storage.models.Category;
+import com.unisul.product_storage.models.Product;
 import com.unisul.product_storage.repositories.CategoryRepository;
 import com.unisul.product_storage.utils.mappers.CategoryMapper;
 import org.springframework.data.domain.Page;
@@ -34,10 +36,19 @@ public class CategoryService {
         return CategoryMapper.toResponse(saved);
     }
 
-    public Page<CategoryResponseDTO> getAllCategories(Pageable pageable) {
-        Page<Category> categories = categoryRepository.findAll(pageable);
+    public Page<CategoryResponseDTO> getAllCategories(String name, Pageable pageable) {
+
+        Page<Category> categories;
+
+        if (name == null || name.isBlank()) {
+            categories = categoryRepository.findAll(pageable);
+        } else {
+            categories = categoryRepository.searchByName(name, pageable);
+        }
+
         return categories.map(CategoryMapper::toResponse);
     }
+
 
     public CategoryResponseDTO getCategoryById(Long id) {
         Category category = categoryRepository.findById(id)

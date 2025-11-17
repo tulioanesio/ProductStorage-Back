@@ -22,6 +22,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -55,7 +56,8 @@ class MovementControllerTest {
                 1L,
                 "Produto Teste",
                 new BigDecimal("99.90"),
-                "unidade"
+                "unidade",
+                20
         );
 
         responseDTO = new MovementResponseDTO(
@@ -86,10 +88,11 @@ class MovementControllerTest {
 
     @Test
     void getAllMovements_ShouldReturnPagedResult() throws Exception {
-        Mockito.when(movementService.getAllMovements(any(Pageable.class)))
+
+        Mockito.when(movementService.getAllMovements(any(Pageable.class), anyString()))
                 .thenReturn(new PageImpl<>(List.of(responseDTO)));
 
-        mockMvc.perform(get("/movements"))
+        mockMvc.perform(get("/movements?page=0&size=20&name=Produto"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].id").value(1))
                 .andExpect(jsonPath("$.content[0].product.name").value("Produto Teste"))

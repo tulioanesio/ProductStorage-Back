@@ -29,8 +29,12 @@ public class MovementController implements SwaggerMovementController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<MovementResponseDTO>> getAll(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(movementService.getAllMovements(pageable));
+    public ResponseEntity<Page<MovementResponseDTO>> getAll(
+            @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable,
+            @RequestParam(required = false) String name
+    ) {
+        return ResponseEntity.ok(movementService.getAllMovements(pageable, name));
     }
 
     @GetMapping("/{id}")

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/products")
-public class ProductController implements SwaggerProductController {
+public class ProductController implements SwaggerProductController{
 
     private final ProductService productService;
 
@@ -29,8 +29,12 @@ public class ProductController implements SwaggerProductController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProductResponseDTO>> getAll(@PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        return ResponseEntity.ok(productService.getAllProducts(pageable));
+    public ResponseEntity<Page<ProductResponseDTO>> getAll(
+            @RequestParam(required = false) String name,
+            @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(productService.getAllProducts(name, pageable));
     }
 
     @GetMapping("/{id}")

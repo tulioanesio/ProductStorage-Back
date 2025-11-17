@@ -39,4 +39,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT COALESCE(SUM(p.unitPrice * p.stockAvailable), 0) FROM Product p")
     BigDecimal calculateTotalStockValue();
+
+    @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
+    Page<Product> searchByName(@Param("name") String name, Pageable pageable);
+
+
 }

@@ -17,5 +17,7 @@ public record ProductSummaryDTO(
         BigDecimal unitPrice,
 
         @Schema(description = "Unidade de medida do produto", example = "unidade")
-        String unitOfMeasure
+        String unitOfMeasure,
+
+        int stockAvailable
 ) {}
