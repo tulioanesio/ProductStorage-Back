@@ -191,7 +191,7 @@ class ProductServiceTest {
             when(productRepository.findAll(any(Pageable.class))).thenReturn(page);
             when(mapper.toResponseDTO(product)).thenReturn(productResponseDTO);
 
-            Page<ProductResponseDTO> result = service.getAllProducts(PageRequest.of(0, 10));
+            Page<ProductResponseDTO> result = service.getAllProducts(null, PageRequest.of(0, 10));
 
             assertEquals(1, result.getTotalElements());
             assertEquals("Notebook Dell", result.getContent().get(0).name());

@@ -50,10 +50,19 @@ public class ProductService {
         return productMapper.toResponseDTO(saved);
     }
 
-    public Page<ProductResponseDTO> getAllProducts(Pageable pageable) {
-        Page<Product> products = productRepository.findAll(pageable);
+    public Page<ProductResponseDTO> getAllProducts(String name, Pageable pageable) {
+
+        Page<Product> products;
+
+        if (name == null || name.isBlank()) {
+            products = productRepository.findAll(pageable);
+        } else {
+            products = productRepository.searchByName(name, pageable);
+        }
+
         return products.map(productMapper::toResponseDTO);
     }
+
 
     public ProductResponseDTO getProductById(Long id) {
         Product product = productRepository.findById(id)

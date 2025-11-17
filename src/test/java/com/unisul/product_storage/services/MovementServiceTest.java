@@ -149,7 +149,7 @@ class MovementServiceTest {
             Page<Movement> page = new PageImpl<>(List.of(movement), PageRequest.of(0, 10), 1);
             when(movementRepository.findAll(any(Pageable.class))).thenReturn(page);
 
-            Page<MovementResponseDTO> result = service.getAllMovements(PageRequest.of(0, 10));
+            Page<MovementResponseDTO> result = service.getAllMovements(PageRequest.of(0, 10), null);
 
             assertEquals(1, result.getTotalElements());
             assertEquals(1L, result.getContent().get(0).product().id());

@@ -40,8 +40,15 @@ public class MovementService {
         return MovementMapper.toResponseDTO(saved);
     }
 
-    public Page<MovementResponseDTO> getAllMovements(Pageable pageable) {
-        Page<Movement> movements = movementRepository.findAll(pageable);
+    public Page<MovementResponseDTO> getAllMovements(Pageable pageable, String name) {
+        Page<Movement> movements;
+
+        if (name != null && !name.isBlank()) {
+            movements = movementRepository.findByProduct_NameContainingIgnoreCase(name, pageable);
+        } else {
+            movements = movementRepository.findAll(pageable);
+        }
+
         return movements.map(MovementMapper::toResponseDTO);
     }
 
@@ -86,13 +93,18 @@ public class MovementService {
     }
 
     public void deleteMovement(Long id) {
-        if (!movementRepository.existsById(id)) {
-            throw new BusinessException(
-                    HttpStatus.NOT_FOUND,
-                    "Movimento não encontrado",
-                    "Não foi possível excluir. Movimento com ID " + id + " não existe."
-            );
-        }
+        Movement movement = movementRepository.findById(id)
+                .orElseThrow(() -> new BusinessException(
+                        HttpStatus.NOT_FOUND,
+                        "Movimento não encontrado",
+                        "Não foi possível excluir. Movimento com ID " + id + " não existe."
+                ));
+
+        Product product = movement.getProduct();
+
+        desfazerEstoqueAnterior(movement, product);
+
+        productRepository.save(product);
         movementRepository.deleteById(id);
     }
 
@@ -103,7 +115,7 @@ public class MovementService {
         if (movement.getMovementType() == MovementType.ENTRY) {
             product.setStockAvailable(currentStock + qty);
             if (product.getStockAvailable() > product.getMaxStockQuantity()) {
-                movement.setStatus("Estoque ultrapassou o limite máximo permitido!");
+                movement.setStatus("Acima do limite permitido!");
             } else {
                 movement.setStatus("Normal");
             }
@@ -117,7 +129,7 @@ public class MovementService {
             }
             product.setStockAvailable(currentStock - qty);
             if (product.getStockAvailable() < product.getMinStockQuantity()) {
-                movement.setStatus("Estoque caiu abaixo do limite mínimo permitido!");
+                movement.setStatus("Abaixo do limite permitido!");
             } else {
                 movement.setStatus("Normal");
             }

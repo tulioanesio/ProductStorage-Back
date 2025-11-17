@@ -49,21 +49,45 @@ class CategoryControllerTest {
 
     @Test
     void shouldGetAllCategories() {
+        String name = null;
         Pageable pageable = PageRequest.of(0, 10);
-        Page<CategoryResponseDTO> page = new PageImpl<>(List.of(new CategoryResponseDTO(1L, "Eletrônicos", "15 polegadas", "Caixa")));
 
-        when(categoryService.getAllCategories(pageable)).thenReturn(page);
+        Page<CategoryResponseDTO> page = new PageImpl<>(
+                List.of(new CategoryResponseDTO(1L, "Eletrônicos", "15 polegadas", "Caixa"))
+        );
 
-        ResponseEntity<Page<CategoryResponseDTO>> result = controller.getAllCategories(pageable);
+        when(categoryService.getAllCategories(name, pageable)).thenReturn(page);
+
+        ResponseEntity<Page<CategoryResponseDTO>> result = controller.getAllCategories(name, pageable);
 
         assertThat(result.getStatusCodeValue()).isEqualTo(200);
         assertThat(result.getBody().getContent()).hasSize(1);
-        verify(categoryService).getAllCategories(pageable);
+
+        verify(categoryService).getAllCategories(name, pageable);
+    }
+
+    @Test
+    void shouldGetAllCategoriesWithNameFilter() {
+        String name = "ele";
+        Pageable pageable = PageRequest.of(0, 10);
+
+        Page<CategoryResponseDTO> page = new PageImpl<>(
+                List.of(new CategoryResponseDTO(1L, "Eletrônicos", "15", "Caixa"))
+        );
+
+        when(categoryService.getAllCategories(name, pageable)).thenReturn(page);
+
+        ResponseEntity<Page<CategoryResponseDTO>> result = controller.getAllCategories(name, pageable);
+
+        assertThat(result.getBody().getContent()).hasSize(1);
+        verify(categoryService).getAllCategories(name, pageable);
     }
 
     @Test
     void shouldGetCategoryById() {
-        CategoryResponseDTO response = new CategoryResponseDTO(1L, "Eletrônicos", "15 polegadas", "Caixa");
+        CategoryResponseDTO response =
+                new CategoryResponseDTO(1L, "Eletrônicos", "15 polegadas", "Caixa");
+
         when(categoryService.getCategoryById(1L)).thenReturn(response);
 
         ResponseEntity<CategoryResponseDTO> result = controller.getCategoryById(1L);
@@ -88,6 +112,7 @@ class CategoryControllerTest {
     @Test
     void shouldDeleteCategory() {
         ResponseEntity<Void> result = controller.deleteCategory(1L);
+
         assertThat(result.getStatusCodeValue()).isEqualTo(204);
         verify(categoryService).deleteCategory(1L);
     }

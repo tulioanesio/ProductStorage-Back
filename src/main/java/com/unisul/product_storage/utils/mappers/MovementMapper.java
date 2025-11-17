@@ -26,7 +26,8 @@ public class MovementMapper {
                 product.getId(),
                 product.getName(),
                 product.getUnitPrice(),
-                product.getUnitOfMeasure()
+                product.getUnitOfMeasure(),
+                product.getStockAvailable()
         );
 
         return new MovementResponseDTO(

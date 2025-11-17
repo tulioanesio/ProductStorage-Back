@@ -1,6 +1,8 @@
 package com.unisul.product_storage.repositories;
 
 import com.unisul.product_storage.models.Movement;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -29,4 +31,8 @@ public interface MovementRepository extends JpaRepository<Movement, Long> {
         FETCH FIRST 1 ROWS ONLY
     """, nativeQuery = true)
     List<Object[]> findTopProductBySaida();
+
+    Page<Movement> findByProduct_NameContainingIgnoreCase(String name, Pageable pageable);
+
+
 }

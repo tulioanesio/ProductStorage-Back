@@ -80,6 +80,7 @@ class MovementMapperTest {
             assertEquals("Notebook", productSummary.name());
             assertEquals(BigDecimal.valueOf(3000.00), productSummary.unitPrice());
             assertEquals("unidade", productSummary.unitOfMeasure());
+
         }
     }
 

@@ -1,10 +1,14 @@
 package com.unisul.product_storage.controllers.category;
 
+import com.unisul.product_storage.controllers.product.SwaggerProductController;
 import com.unisul.product_storage.dtos.category.CategoryRequestDTO;
 import com.unisul.product_storage.dtos.category.CategoryResponseDTO;
+import com.unisul.product_storage.dtos.product.ProductResponseDTO;
 import com.unisul.product_storage.services.CategoryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +30,12 @@ public class CategoryController implements SwaggerCategoryController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CategoryResponseDTO>> getAllCategories(Pageable pageable) {
-        Page<CategoryResponseDTO> categories = categoryService.getAllCategories(pageable);
-        return ResponseEntity.ok(categories);
+    public ResponseEntity<Page<CategoryResponseDTO>> getAllCategories(
+            @RequestParam(required = false) String name,
+            @PageableDefault(page = 0, size = 20, sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ) {
+        return ResponseEntity.ok(categoryService.getAllCategories(name, pageable));
     }
 
     @GetMapping("/{id}")
