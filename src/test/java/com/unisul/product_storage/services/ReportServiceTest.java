@@ -166,52 +166,61 @@ class ReportServiceTest {
     class ProductsByCategoryReport {
 
         @Test
-        @DisplayName("Deve retornar contagem de produtos para uma categoria específica")
+        @DisplayName("Deve retornar contagem de produtos para uma categoria específica (Paginado)")
         void getProductsByCategory_ShouldReturn_WhenCategoryIdIsProvided() {
             Object[] row = new Object[]{"Eletrônicos", 10L};
             List<Object[]> results = Collections.singletonList(row);
 
             when(productRepository.countProductsByCategoryId(1L)).thenReturn(results);
 
-            List<ProductsByCategoryResponseDTO> resultList = reportService.getProductsByCategory(1L);
+            Page<ProductsByCategoryResponseDTO> result = reportService.getProductsByCategory(pageable, 1L);
 
-            assertEquals(1, resultList.size());
-            assertEquals("Eletrônicos", resultList.get(0).name());
-            assertEquals(10, resultList.get(0).quantity());
+            assertNotNull(result);
+            assertEquals(1, result.getTotalElements());
+            assertEquals("Eletrônicos", result.getContent().get(0).name());
+            assertEquals(10, result.getContent().get(0).quantity());
         }
 
         @Test
-        @DisplayName("Deve retornar contagem de produtos para todas as categorias")
+        @DisplayName("Deve retornar contagem de produtos para todas as categorias (Paginado)")
         void getProductsByCategory_ShouldReturn_WhenCategoryIdIsNull() {
             Object[] row1 = new Object[]{"Eletrônicos", 10L};
             Object[] row2 = new Object[]{"Móveis", 5};
-            List<Object[]> results = List.of(row1, row2);
+            List<Object[]> content = List.of(row1, row2);
+            Page<Object[]> pageResults = new PageImpl<>(content, pageable, 2);
 
-            when(productRepository.countProductsByCategory()).thenReturn(results);
+            when(productRepository.countProductsByCategory(pageable)).thenReturn(pageResults);
 
-            List<ProductsByCategoryResponseDTO> resultList = reportService.getProductsByCategory(null);
+            Page<ProductsByCategoryResponseDTO> result = reportService.getProductsByCategory(pageable, null);
 
-            assertEquals(2, resultList.size());
-            assertEquals("Eletrônicos", resultList.get(0).name());
-            assertEquals(10, resultList.get(0).quantity());
-            assertEquals("Móveis", resultList.get(1).name());
-            assertEquals(5, resultList.get(1).quantity());
+            assertNotNull(result);
+            assertEquals(2, result.getTotalElements());
+            assertEquals("Eletrônicos", result.getContent().get(0).name());
+            assertEquals(10, result.getContent().get(0).quantity());
+            assertEquals("Móveis", result.getContent().get(1).name());
+            assertEquals(5, result.getContent().get(1).quantity());
         }
 
         @Test
-        @DisplayName("Deve retornar lista vazia se a consulta retornar nulo")
-        void getProductsByCategory_ShouldReturnEmptyList_WhenResultsAreNull() {
-            when(productRepository.countProductsByCategory()).thenReturn(null);
-            List<ProductsByCategoryResponseDTO> resultList = reportService.getProductsByCategory(null);
-            assertTrue(resultList.isEmpty());
+        @DisplayName("Deve retornar página vazia se a consulta retornar nulo (Caso com CategoryId)")
+        void getProductsByCategory_ShouldReturnEmptyPage_WhenResultsAreNullWithId() {
+            when(productRepository.countProductsByCategoryId(1L)).thenReturn(null);
+
+            Page<ProductsByCategoryResponseDTO> result = reportService.getProductsByCategory(pageable, 1L);
+
+            assertNotNull(result);
+            assertTrue(result.isEmpty());
         }
 
         @Test
-        @DisplayName("Deve retornar lista vazia se a consulta retornar lista vazia")
-        void getProductsByCategory_ShouldReturnEmptyList_WhenResultsAreEmpty() {
-            when(productRepository.countProductsByCategoryId(1L)).thenReturn(Collections.emptyList());
-            List<ProductsByCategoryResponseDTO> resultList = reportService.getProductsByCategory(1L);
-            assertTrue(resultList.isEmpty());
+        @DisplayName("Deve retornar página vazia se a consulta retornar vazio (Caso sem CategoryId)")
+        void getProductsByCategory_ShouldReturnEmptyPage_WhenResultsAreEmptyNoId() {
+            when(productRepository.countProductsByCategory(pageable)).thenReturn(Page.empty(pageable));
+
+            Page<ProductsByCategoryResponseDTO> result = reportService.getProductsByCategory(pageable, null);
+
+            assertNotNull(result);
+            assertTrue(result.isEmpty());
         }
     }
 

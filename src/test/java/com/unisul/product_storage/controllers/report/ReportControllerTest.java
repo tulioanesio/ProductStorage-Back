@@ -43,6 +43,7 @@ class ReportControllerTest {
 
         ResponseEntity<Page<PriceListResponseDTO>> result = controller.getPriceList(pageable);
 
+        assertThat(result.getBody()).isNotNull();
         assertThat(result.getBody().getContent()).hasSize(1);
         verify(service).getPriceList(pageable);
     }
@@ -65,17 +66,25 @@ class ReportControllerTest {
 
         ResponseEntity<Page<LowStockProductsResponseDTO>> result = controller.getLowStockProducts(pageable);
 
+        assertThat(result.getBody()).isNotNull();
         assertThat(result.getBody().getContent()).hasSize(1);
     }
 
     @Test
     void shouldReturnProductsByCategory() {
-        List<ProductsByCategoryResponseDTO> list = List.of(new ProductsByCategoryResponseDTO("Eletrônicos", 10));
-        when(service.getProductsByCategory(null)).thenReturn(list);
+        Pageable pageable = PageRequest.of(0, 20);
+        ProductsByCategoryResponseDTO dto = new ProductsByCategoryResponseDTO("Eletrônicos", 10);
+        Page<ProductsByCategoryResponseDTO> page = new PageImpl<>(List.of(dto));
+        Long categoryId = null;
 
-        ResponseEntity<List<ProductsByCategoryResponseDTO>> result = controller.getProductsByCategory(null);
+        when(service.getProductsByCategory(pageable, categoryId)).thenReturn(page);
 
-        assertThat(result.getBody()).hasSize(1);
+        ResponseEntity<Page<ProductsByCategoryResponseDTO>> result = controller.getProductsByCategory(pageable, categoryId);
+
+        assertThat(result.getBody()).isNotNull();
+        assertThat(result.getBody().getTotalElements()).isEqualTo(1);
+        assertThat(result.getBody().getContent().get(0).name()).isEqualTo("Eletrônicos");
+        verify(service).getProductsByCategory(pageable, categoryId);
     }
 
     @Test

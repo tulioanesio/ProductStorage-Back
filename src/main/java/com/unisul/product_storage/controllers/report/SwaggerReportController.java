@@ -72,21 +72,21 @@ public interface SwaggerReportController {
             }
     )
     @GetMapping("/products-by-category")
-    ResponseEntity<List<ProductsByCategoryResponseDTO>> getProductsByCategory(@RequestParam(required = false) Long categoryId);
+    ResponseEntity<Page<ProductsByCategoryResponseDTO>> getProductsByCategory(
+            Pageable pageable,
+            @RequestParam(required = false) Long categoryId
+    );
 
     @Operation(
-            summary = "Produto com maior saída",
-            description = "Retorna uma lista (normalmente com 1 item) do produto que mais teve movimentações de saída (venda, baixa, etc.). " +
-                    "Caso não exista, retorna um array vazio [].",
+            summary = "Produtos agrupados por categoria",
+            description = "Retorna o número de produtos por categoria. Caso seja informado o ID da categoria, retorna apenas os produtos dessa categoria.",
+            parameters = {
+                    @Parameter(name = "categoryId", description = "ID da categoria (opcional)", example = "3")
+            },
             responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Lista com o produto de maior saída retornada com sucesso (ou vazia se nenhum encontrado)",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    array = @ArraySchema(schema = @Schema(implementation = MostProductMovementResponseDTO.class))
-                            )
-                    )
+                    @ApiResponse(responseCode = "200", description = "Relatório por categoria retornado com sucesso",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = Page.class)))
             }
     )
     @GetMapping("/most-output-product")
