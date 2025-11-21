@@ -209,7 +209,7 @@ public class DataSeeder {
                 new ProductDefinition("Teclado Mecânico HyperX", new BigDecimal("499.00"), "UN", 3, 5, 30, "Eletrônicos"),
                 new ProductDefinition("iPhone 15 128GB", new BigDecimal("5499.00"), "UN", 15, 5, 30, "Smartphones"),
                 new ProductDefinition("Samsung Galaxy S23", new BigDecimal("3999.00"), "UN", 20, 5, 40, "Smartphones"),
-                new ProductDefinition("Cabo HDMI 2.0 2m", new BigDecimal("25.00"), "UN", 2, 20, 300, "Informática"),
+                new ProductDefinition("Cabo HDMI 2.0 2m", new BigDecimal("25.00"), "UN", 320, 20, 300, "Informática"),
                 new ProductDefinition("Coca-Cola 2L", new BigDecimal("9.99"), "UN", 150, 50, 500, "Bebidas"),
                 new ProductDefinition("Cerveja Heineken Long Neck", new BigDecimal("6.49"), "UN", 240, 60, 1000, "Bebidas"),
                 new ProductDefinition("Suco de Laranja Prats 900ml", new BigDecimal("14.50"), "UN", 40, 10, 100, "Bebidas"),
