@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reports")
-public class ReportController implements SwaggerReportController{
+public class ReportController implements SwaggerReportController {
 
     private final ReportService reportService;
 
@@ -53,10 +53,11 @@ public class ReportController implements SwaggerReportController{
     }
 
     @GetMapping("/products-by-category")
-    public ResponseEntity<List<ProductsByCategoryResponseDTO>> getProductsByCategory(
-            @RequestParam(required = false) Long categoryId
+    public ResponseEntity<Page<ProductsByCategoryResponseDTO>> getProductsByCategory(@PageableDefault(page = 0, size = 20, sort = "categoryName", direction = Sort.Direction.ASC)
+                                                                                     Pageable pageable,
+                                                                                     @RequestParam(required = false) Long categoryId
     ) {
-        return ResponseEntity.ok(reportService.getProductsByCategory(categoryId));
+        return ResponseEntity.ok(reportService.getProductsByCategory(pageable, categoryId));
     }
 
     @GetMapping("/most-output-product")

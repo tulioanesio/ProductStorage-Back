@@ -20,13 +20,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p WHERE p.stockAvailable > p.maxStockQuantity")
     Page<Product> findHighStockProducts(Pageable pageable);
 
-    @Query("""
+    @Query(value = """
            SELECT c.name AS categoryName, COUNT(DISTINCT p.id) AS productCount
            FROM Product p
            JOIN p.category c
            GROUP BY c.name
+           """,
+            countQuery = """
+           SELECT COUNT(DISTINCT c.name)
+           FROM Product p
+           JOIN p.category c
            """)
-    List<Object[]> countProductsByCategory();
+    Page<Object[]> countProductsByCategory(Pageable pageable);
 
     @Query("""
            SELECT c.name AS categoryName, COUNT(DISTINCT p.id) AS productCount
@@ -42,6 +47,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(CONCAT('%', :name, '%'))")
     Page<Product> searchByName(@Param("name") String name, Pageable pageable);
-
-
 }

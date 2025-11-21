@@ -10,13 +10,13 @@ import com.unisul.product_storage.repositories.MovementRepository;
 import com.unisul.product_storage.repositories.ProductRepository;
 import com.unisul.product_storage.utils.mappers.ReportMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
@@ -51,25 +51,29 @@ public class ReportService {
                 .map(reportMapper::toLowStockProductsDTO);
     }
 
-    public List<ProductsByCategoryResponseDTO> getProductsByCategory(Long categoryId) {
-        List<Object[]> results;
-
+    public Page<ProductsByCategoryResponseDTO> getProductsByCategory(Pageable pageable, Long categoryId) {
         if (categoryId != null) {
-            results = productRepository.countProductsByCategoryId(categoryId);
+            List<Object[]> results = productRepository.countProductsByCategoryId(categoryId);
+
+            if (results == null || results.isEmpty()) {
+                return Page.empty(pageable);
+            }
+
+            List<ProductsByCategoryResponseDTO> dtos = results.stream()
+                    .map(result -> new ProductsByCategoryResponseDTO(
+                            (String) result[0],
+                            ((Number) result[1]).intValue()
+                    ))
+                    .toList();
+
+            return new PageImpl<>(dtos, pageable, dtos.size());
         } else {
-            results = productRepository.countProductsByCategory();
+            return productRepository.countProductsByCategory(pageable)
+                    .map(result -> new ProductsByCategoryResponseDTO(
+                            (String) result[0],
+                            ((Number) result[1]).intValue()
+                    ));
         }
-
-        if (results == null || results.isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        return results.stream()
-                .map(result -> new ProductsByCategoryResponseDTO(
-                        (String) result[0],
-                        ((Number) result[1]).intValue()
-                ))
-                .collect(Collectors.toList());
     }
 
     public List<MostProductMovementResponseDTO> getMostOutputProduct() {
