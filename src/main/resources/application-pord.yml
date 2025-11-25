@@ -1,6 +1,3 @@
-# =====================================
-# Application generic config
-# =====================================
 spring:
   application:
     name: ProductStorage-Back
@@ -8,9 +5,9 @@ spring:
     description: Aplicação backend para o sistema de controle de estoque ProductStorage
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/mydatabase
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -19,46 +16,26 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+    show-sql: false
 
   main:
     banner-mode: console
 
 logging:
   level:
-    org.springframework: info
+    org.springframework: warn
 
-# =====================================
-# Swagger config
-# =====================================
 swagger:
   title: ${info.app.name:ProductStorage-Back}
   description: ${info.app.description:Aplicação backend}
   version: ${info.app.version:0.0.1-SNAPSHOT}
-  terms-of-service-url: "http://localhost:8080/terms"
-  license-name: MIT
-  license-url: https://opensource.org/license/mit
-  contact:
-    name: "Pedro Nieto"
-    url: "https://github.com/Pedroo-Nietoo"
-    email: "pedronieto.2005@gmail.com"
   servers:
-    - url: http://localhost:8080
-      description: Ambiente local
-    - url: https://staging-api.productstorage.com
-      description: Ambiente de desenvolvimento
     - url: https://api.productstorage.com
       description: Ambiente de produção
 
-# =====================================
-# Server config
-# =====================================
 server:
   port: 8080
 
-# =====================================
-# Actuator + Management config
-# =====================================
 management:
   endpoints:
     web:
@@ -73,9 +50,6 @@ management:
       export:
         enabled: true
 
-# =====================================
-# Application info metadata
-# =====================================
 info:
   app:
     name: ${spring.application.name}
@@ -84,7 +58,7 @@ info:
   build:
     timestamp: ${maven.build.timestamp:2025-10-30T00:00:00Z}
   environment:
-    profile: ${spring.profiles.active:local}
+    profile: prod
     java:
       version: ${java.version}
     os:
