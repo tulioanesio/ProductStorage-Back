@@ -38,6 +38,9 @@ swagger:
 server:
   port: 8080
 
+cors:
+  allowed-origins: ${ALLOWED_ORIGINS:https://prd-strg-back.onrender.com}
+
 management:
   endpoints:
     web:
