@@ -8,15 +8,17 @@ spring:
     description: Aplicação backend para o sistema de controle de estoque ProductStorage
 
   datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: a3
-    password: "123"
+    url: jdbc:postgresql://localhost:5432/mydatabase
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
 
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
 
   main:
