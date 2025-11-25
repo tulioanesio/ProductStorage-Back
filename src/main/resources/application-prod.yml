@@ -39,7 +39,7 @@ server:
   port: 8080
 
 cors:
-  allowed-origins: ${ALLOWED_ORIGINS:https://prd-strg-back.onrender.com}
+  allowed-origins: ${ALLOWED_ORIGINS:https://product-storage-front-gold.vercel.app}
 
 management:
   endpoints:
