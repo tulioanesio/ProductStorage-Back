@@ -1,10 +1,12 @@
 # Product Storage Backend
 
-[![Java](https://img.shields.io/badge/Java-17-blue.svg)](https://www.oracle.com/java/)
-[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg)](https://spring.io/projects/spring-boot)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue.svg)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED.svg)](https://www.docker.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+![Build Status](https://img.shields.io/github/actions/workflow/status/tulioanesio/ProductStorage-Back/workflow-dev.yml?branch=main)
+[![Java](https://img.shields.io/badge/Java-21-blue.svg?logo=openjdk)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.x-brightgreen.svg?logo=springboot)](https://spring.io/projects/spring-boot)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791.svg?&logo=postgresql)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED.svg?logo=docker)](https://www.docker.com/)
+[![Swagger](https://img.shields.io/badge/Swagger-OpenAPI-85EA2D.svg?logo=swagger)](https://swagger.io/)
+[![License](https://img.shields.io/github/license/tulioanesio/ProductStorage-Back)](LICENSE)
 
 ## Overview
 
@@ -84,7 +86,7 @@ It provides full CRUD operations for products, categories, stock movements and r
 
 ### Requirements
 - Docker and Docker Compose installed
-- Java 17 or higher
+- Java 21 or higher
 - Maven
 
 ### Steps
